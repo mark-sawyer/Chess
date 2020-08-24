@@ -5,10 +5,11 @@ using UnityEngine;
 public class Space {
     public Piece piece;
     public bool isEmpty;
-    public int[,] coordinates;
+    public int file, rank;
 
-    public Space(int[,] coordinates) {
-        this.coordinates = coordinates;
+    public Space(int file, int rank) {
+        this.file = file;
+        this.rank = rank;
         isEmpty = true;
     }
 

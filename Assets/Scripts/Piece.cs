@@ -5,10 +5,12 @@ using UnityEngine;
 public abstract class Piece {
     public Space space;
     public Colour colour;
+    public Space[,] board;
 
     public Piece(Space space, Colour colour) {
         this.space = space;
         this.colour = colour;
+        board = Board.board;
     }
 
     public abstract void move();
