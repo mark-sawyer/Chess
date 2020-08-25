@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Board : MonoBehaviour {
     public static Space[,] board = new Space[8, 8];
-    public static List<Piece> takenBlackPieces;
-    public static List<Piece> takenWhitePieces;
+    public static List<Piece> aliveWhitePieces;
+    public static List<Piece> aliveBlackPieces;
+    public static Colour turn;
 
     private void Awake() {
+        GameEvents.changeTurn.AddListener(changeTurn);
+
         // Create the board.
         for (int file = 0; file < 8; file++) {
             for (int rank = 0; rank < 8; rank++) {
@@ -16,11 +19,32 @@ public class Board : MonoBehaviour {
         }
 
         // Populate the board.
+        aliveBlackPieces = new List<Piece>();
+        aliveWhitePieces = new List<Piece>();
         for (int file = 0; file < 8; file++) {
-            board[file, 0].setPiece(new Pawn(board[file, 0], Colour.WHITE));
             board[file, 1].setPiece(new Pawn(board[file, 1], Colour.WHITE));
-            board[file, 6].setPiece(new Pawn(board[file, 6], Colour.WHITE));
-            board[file, 7].setPiece(new Pawn(board[file, 7], Colour.WHITE));
+            aliveWhitePieces.Add(board[file, 1].piece);
+
+            board[file, 6].setPiece(new Pawn(board[file, 6], Colour.BLACK));
+            aliveBlackPieces.Add(board[file, 6].piece);
         }
+
+        GameEvents.getReachableSpaces.Invoke();
+    }
+
+    public static void changeTurn() {
+        if (turn == Colour.WHITE) {
+            turn = Colour.BLACK;
+        }
+        else {
+            turn = Colour.WHITE;
+        }
+
+        GameEvents.getReachableSpaces.Invoke();
     }
 }
+
+public enum Colour {
+    WHITE,
+    BLACK
+};

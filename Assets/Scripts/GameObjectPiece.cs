@@ -3,29 +3,47 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameObjectPiece : MonoBehaviour {
+    public LayerMask reachableLayer;
+    public Space[,] board;
     private bool beingHeld;
     public Piece piece;
+    public GameObject reachableSpace;
 
     private void Start() {
-        GameEvents.removePieces.AddListener(removePiece);
+        board = Board.board;
+        GameEvents.changeTurn.AddListener(removePiece);
     }
 
     private void Update() {
         if (beingHeld) {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (Input.GetMouseButtonUp(0)) {
-                transform.position = new Vector3(piece.space.file, piece.space.rank, 0);
-                beingHeld = false;
+                RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, reachableLayer);
+                if (ray.collider != null) {
+                    int newFile = ray.collider.GetComponent<ReachableSpace>().file;
+                    int newRank = ray.collider.GetComponent<ReachableSpace>().rank;
+                    piece.setPosition(board[newFile, newRank]);
+                }
+                else {
+                    transform.position = new Vector3(piece.space.file, piece.space.rank, 0);
+                    beingHeld = false;
+                }
+                GameEvents.removeReachableGameObjects.Invoke();
             }
             else {
-                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 transform.position = new Vector3(mousePos.x, mousePos.y, -1);
-                print("file: " + piece.space.file + " rank: " + piece.space.rank);
             }
         }
     }
 
     public void startBeingHeld() {
         beingHeld = true;
+        for (int i = 0; i < piece.reachableSpaces.Count; i++) {
+            int file = piece.reachableSpaces[i].file;
+            int rank = piece.reachableSpaces[i].rank;
+
+            Instantiate(reachableSpace, new Vector3(file, rank, 0), Quaternion.identity);
+        }
     }
 
     public void removePiece() {

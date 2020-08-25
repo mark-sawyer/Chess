@@ -3,73 +3,76 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Pawn : Piece {
-    public bool hasMoved;
-    public List<Space> reachableSpaces;
-    public List<Piece> attackablePieces;
+    //public bool hasMoved;
+    private int direction;
 
-    public Pawn(Space space, Colour colour) : base(space, colour) { }
+    public Pawn(Space space, Colour colour) : base(space, colour) {
+        value = 1;
 
-    public void getReachableSpaces() {
-        int file = space.file;
-        int rank = space.rank;
-
-        // Black
-        if (colour == Colour.BLACK && rank >= 1) {
-            // Add space ahead if empty.
-            if (board[file, rank - 1].isEmpty) {
-                reachableSpaces.Add(board[file, rank - 1]);
-
-                // Add two spaces ahead if empty and the pawn hasn't moved.
-                if (!hasMoved && board[file, 4].isEmpty) {
-                    reachableSpaces.Add(board[file, 4]);
-                }
-            }
-
-            // Add diagonals.
-            // Lower file.
-            if (file >= 1 && !board[file - 1, rank -1].isEmpty && board[file - 1, rank - 1].piece.colour == Colour.WHITE) {
-                reachableSpaces.Add(board[file - 1, rank - 1]);
-                attackablePieces.Add(board[file - 1, rank - 1].piece);
-            }
-            // Higher file.
-            if (file <= 6 && !board[file + 1, rank - 1].isEmpty && board[file + 1, rank - 1].piece.colour == Colour.WHITE) {
-                reachableSpaces.Add(board[file + 1, rank - 1]);
-                attackablePieces.Add(board[file + 1, rank - 1].piece);
-            }
-
-            // IMPLEMENT EN PASSANT LATER
+        if (colour == Colour.WHITE) {
+            direction = 1;
         }
-
-        // White
-        else if (colour == Colour.WHITE && rank <= 6) {
-            // Add space ahead if empty.
-            if (board[file, rank + 1].isEmpty) {
-                reachableSpaces.Add(board[file, rank + 1]);
-
-                // Add two spaces ahead if empty and the pawn hasn't moved.
-                if (!hasMoved && board[file, 3].isEmpty) {
-                    reachableSpaces.Add(board[file, 3]);
-                }
-            }
-
-            // Add diagonals.
-            // Lower file.
-            if (file >= 1 && !board[file - 1, rank + 1].isEmpty && board[file - 1, rank + 1].piece.colour == Colour.BLACK) {
-                reachableSpaces.Add(board[file - 1, rank + 1]);
-                attackablePieces.Add(board[file - 1, rank + 1].piece);
-            }
-            // Higher file.
-            if (file <= 6 && !board[file + 1, rank + 1].isEmpty && board[file + 1, rank + 1].piece.colour == Colour.BLACK) {
-                reachableSpaces.Add(board[file + 1, rank + 1]);
-                attackablePieces.Add(board[file + 1, rank + 1].piece);
-            }
-
-            // IMPLEMENT EN PASSANT LATER
+        else {
+            direction = -1;
         }
     }
 
-    public override void move() {
+    public override void getReachableSpaces() {
+        base.getReachableSpaces();
 
-        reachableSpaces.Clear();
+        int file = space.file;
+        int rank = space.rank;
+
+        // Add space ahead if empty.
+        if (rank % 7 >= 1 && board[file, rank + direction].isEmpty) {
+            reachableSpaces.Add(board[file, rank + direction]);
+
+            // Add two spaces ahead if empty and the pawn hasn't moved.
+            if (!hasMoved && board[file, rank + (2 * direction)].isEmpty) {
+                reachableSpaces.Add(board[file, rank + (2 * direction)]);
+            }
+        }
+
+        // Add diagonals.
+        // Lower file.
+        if (rank % 7 >= 1 && file >= 1 && !board[file - 1, rank + direction].isEmpty && board[file - 1, rank + direction].piece.colour != colour) {
+            reachableSpaces.Add(board[file - 1, rank + direction]);
+        }
+        // Higher file.
+        if (rank % 7 >= 1 && file <= 6 && !board[file + 1, rank + direction].isEmpty && board[file + 1, rank + direction].piece.colour != colour) {
+            reachableSpaces.Add(board[file + 1, rank + direction]);
+        }
+    }
+
+    public override void setPosition(Space newSpace) {
+        hasMoved = true;
+
+        // Check if a piece is being taken.
+        if (!newSpace.isEmpty) {
+            Piece removedPiece = newSpace.piece;
+            newSpace.removePiece();
+
+            if (removedPiece.colour == Colour.WHITE) {
+                Board.aliveWhitePieces.Remove(removedPiece);
+            }
+            else {
+                Board.aliveBlackPieces.Remove(removedPiece);
+            }
+        }
+
+        space.removePiece();
+        space = newSpace;
+        space.setPiece(this);
+
+        GameEvents.changeTurn.Invoke();
+    }
+
+    public override GameObject getGameObject() {
+        if (colour == Colour.WHITE) {
+            return Resources.Load<GameObject>("White/white pawn");
+        }
+        else {
+            return Resources.Load<GameObject>("Black/black pawn");
+        }
     }
 }
