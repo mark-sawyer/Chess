@@ -29,6 +29,11 @@ public class Board : MonoBehaviour {
             aliveBlackPieces.Add(board[file, 6].piece);
         }
 
+        board[0, 0].setPiece(new Rook(board[0, 0], Colour.WHITE));
+        board[7, 0].setPiece(new Rook(board[7, 0], Colour.WHITE));
+        board[0, 7].setPiece(new Rook(board[0, 7], Colour.BLACK));
+        board[7, 7].setPiece(new Rook(board[7, 7], Colour.BLACK));
+
         GameEvents.getReachableSpaces.Invoke();
     }
 

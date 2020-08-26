@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Pawn : Piece {
-    //public bool hasMoved;
     private int direction;
+    public bool hasMoved;
 
     public Pawn(Space space, Colour colour) : base(space, colour) {
         value = 1;
@@ -14,11 +14,12 @@ public class Pawn : Piece {
         }
         else {
             direction = -1;
+            value *= -1;
         }
     }
 
     public override void getReachableSpaces() {
-        base.getReachableSpaces();
+        reachableSpaces.Clear();
 
         int file = space.file;
         int rank = space.rank;
@@ -47,24 +48,7 @@ public class Pawn : Piece {
     public override void setPosition(Space newSpace) {
         hasMoved = true;
 
-        // Check if a piece is being taken.
-        if (!newSpace.isEmpty) {
-            Piece removedPiece = newSpace.piece;
-            newSpace.removePiece();
-
-            if (removedPiece.colour == Colour.WHITE) {
-                Board.aliveWhitePieces.Remove(removedPiece);
-            }
-            else {
-                Board.aliveBlackPieces.Remove(removedPiece);
-            }
-        }
-
-        space.removePiece();
-        space = newSpace;
-        space.setPiece(this);
-
-        GameEvents.changeTurn.Invoke();
+        base.setPosition(newSpace);
     }
 
     public override GameObject getGameObject() {

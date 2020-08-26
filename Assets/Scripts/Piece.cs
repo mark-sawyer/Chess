@@ -8,7 +8,6 @@ public abstract class Piece {
     public List<Space> reachableSpaces;
     public Colour colour;
     public int value;
-    public bool hasMoved;
 
     public Piece(Space space, Colour colour) {
         this.space = space;
@@ -17,10 +16,6 @@ public abstract class Piece {
         reachableSpaces = new List<Space>();
 
         GameEvents.getReachableSpaces.AddListener(getReachableSpaces);
-    }
-
-    public virtual void getReachableSpaces() {
-        reachableSpaces.Clear();
     }
 
     public virtual void setPosition(Space newSpace) {
@@ -43,6 +38,8 @@ public abstract class Piece {
 
         GameEvents.changeTurn.Invoke();
     }
+
+    public abstract void getReachableSpaces();
 
     public abstract GameObject getGameObject();
 }
