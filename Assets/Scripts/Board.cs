@@ -32,6 +32,12 @@ public class Board : MonoBehaviour {
         board[0, 7].setPiece(new Rook(board[0, 7], Colour.BLACK));
         board[7, 7].setPiece(new Rook(board[7, 7], Colour.BLACK));
 
+        // Knights
+        board[1, 0].setPiece(new Knight(board[1, 0], Colour.WHITE));
+        board[6, 0].setPiece(new Knight(board[6, 0], Colour.WHITE));
+        board[1, 7].setPiece(new Knight(board[1, 7], Colour.BLACK));
+        board[6, 7].setPiece(new Knight(board[6, 7], Colour.BLACK));
+
         // Bishops
         board[2, 0].setPiece(new Bishop(board[2, 0], Colour.WHITE));
         board[5, 0].setPiece(new Bishop(board[5, 0], Colour.WHITE));
@@ -42,8 +48,9 @@ public class Board : MonoBehaviour {
         board[3, 0].setPiece(new Queen(board[3, 0], Colour.WHITE));
         board[3, 7].setPiece(new Queen(board[3, 7], Colour.BLACK));
 
-
-
+        // Kings
+        board[4, 0].setPiece(new King(board[4, 0], Colour.WHITE));
+        board[4, 7].setPiece(new King(board[4, 7], Colour.BLACK));
 
         aliveWhitePieces = new List<Piece>();
         for (int file = 0; file < 8; file++) {
@@ -63,7 +70,7 @@ public class Board : MonoBehaviour {
             }
         }
 
-        GameEvents.getReachableSpaces.Invoke();
+        GameEvents.getReachableOrAttackingSpaces.Invoke();
     }
 
     public static void changeTurn() {
@@ -74,7 +81,9 @@ public class Board : MonoBehaviour {
             turn = Colour.WHITE;
         }
 
-        GameEvents.getReachableSpaces.Invoke();
+        GameEvents.clearBeingAttacked.Invoke();
+        GameEvents.getReachableOrAttackingSpaces.Invoke();
+        GameEvents.getReachableSpacesKing.Invoke();
     }
 }
 

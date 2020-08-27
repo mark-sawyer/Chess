@@ -14,8 +14,6 @@ public abstract class Piece {
         this.colour = colour;
         board = Board.board;
         reachableSpaces = new List<Space>();
-
-        GameEvents.getReachableSpaces.AddListener(getReachableSpaces);
     }
 
     public virtual void setPosition(Space newSpace) {
@@ -42,4 +40,8 @@ public abstract class Piece {
     public abstract void getReachableSpaces();
 
     public abstract GameObject getGameObject();
+
+    public bool inBoardRange(int num) {
+        return num >= 0 && num <= 7;
+    }
 }

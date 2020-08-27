@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Queen : OrthoDiagPiece {
     public Queen(Space space, Colour colour) : base(space, colour) {
+        GameEvents.getReachableOrAttackingSpaces.AddListener(getReachableSpaces);
         value = 9;
         isOrtho = true;
         isDiag = true;

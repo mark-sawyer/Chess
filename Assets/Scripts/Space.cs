@@ -5,9 +5,13 @@ using UnityEngine;
 public class Space {
     public Piece piece;
     public bool isEmpty;
+    public bool isBeingAttackedByWhite;
+    public bool isBeingAttackedByBlack;
     public int file, rank;
 
     public Space(int file, int rank) {
+        GameEvents.clearBeingAttacked.AddListener(clearBeingAttacked);
+
         this.file = file;
         this.rank = rank;
         isEmpty = true;
@@ -21,5 +25,19 @@ public class Space {
     public void removePiece() {
         piece = null;
         isEmpty = true;
+    }
+
+    public void setBeingAttacked(Colour colour) {
+        if (colour == Colour.WHITE) {
+            isBeingAttackedByWhite = true;
+        }
+        else {
+            isBeingAttackedByBlack = true;
+        }
+    }
+
+    private void clearBeingAttacked() {
+        isBeingAttackedByWhite = false;
+        isBeingAttackedByBlack = false;
     }
 }

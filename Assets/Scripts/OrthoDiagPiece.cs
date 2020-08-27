@@ -20,8 +20,9 @@ public abstract class OrthoDiagPiece : Piece {
 
             // Down file
             spaceObservedNum = file - 1;
-            while (spaceObservedNum >= 0) {
+            while (inBoardRange(spaceObservedNum)) {
                 spaceObserved = board[spaceObservedNum, rank];
+                spaceObserved.setBeingAttacked(colour);
 
                 if (spaceObserved.isEmpty) {
                     reachableSpaces.Add(spaceObserved);
@@ -37,8 +38,9 @@ public abstract class OrthoDiagPiece : Piece {
 
             // Up file
             spaceObservedNum = file + 1;
-            while (spaceObservedNum <= 7) {
+            while (inBoardRange(spaceObservedNum)) {
                 spaceObserved = board[spaceObservedNum, rank];
+                spaceObserved.setBeingAttacked(colour);
 
                 if (spaceObserved.isEmpty) {
                     reachableSpaces.Add(spaceObserved);
@@ -56,6 +58,7 @@ public abstract class OrthoDiagPiece : Piece {
             spaceObservedNum = rank - 1;
             while (spaceObservedNum >= 0) {
                 spaceObserved = board[file, spaceObservedNum];
+                spaceObserved.setBeingAttacked(colour);
 
                 if (spaceObserved.isEmpty) {
                     reachableSpaces.Add(spaceObserved);
@@ -73,6 +76,7 @@ public abstract class OrthoDiagPiece : Piece {
             spaceObservedNum = rank + 1;
             while (spaceObservedNum <= 7) {
                 spaceObserved = board[file, spaceObservedNum];
+                spaceObserved.setBeingAttacked(colour);
 
                 if (spaceObserved.isEmpty) {
                     reachableSpaces.Add(spaceObserved);
@@ -96,6 +100,7 @@ public abstract class OrthoDiagPiece : Piece {
             observedRankNum = rank + 1;
             while (observedFileNum <= 7 && observedRankNum <= 7) {
                 spaceObserved = board[observedFileNum, observedRankNum];
+                spaceObserved.setBeingAttacked(colour);
 
                 if (spaceObserved.isEmpty) {
                     reachableSpaces.Add(spaceObserved);
@@ -115,6 +120,7 @@ public abstract class OrthoDiagPiece : Piece {
             observedRankNum = rank - 1;
             while (observedFileNum <= 7 && observedRankNum >= 0) {
                 spaceObserved = board[observedFileNum, observedRankNum];
+                spaceObserved.setBeingAttacked(colour);
 
                 if (spaceObserved.isEmpty) {
                     reachableSpaces.Add(spaceObserved);
@@ -134,6 +140,7 @@ public abstract class OrthoDiagPiece : Piece {
             observedRankNum = rank - 1;
             while (observedFileNum >= 0 && observedRankNum >= 0) {
                 spaceObserved = board[observedFileNum, observedRankNum];
+                spaceObserved.setBeingAttacked(colour);
 
                 if (spaceObserved.isEmpty) {
                     reachableSpaces.Add(spaceObserved);
@@ -153,6 +160,7 @@ public abstract class OrthoDiagPiece : Piece {
             observedRankNum = rank + 1;
             while (observedFileNum >= 0 && observedRankNum <= 7) {
                 spaceObserved = board[observedFileNum, observedRankNum];
+                spaceObserved.setBeingAttacked(colour);
 
                 if (spaceObserved.isEmpty) {
                     reachableSpaces.Add(spaceObserved);

@@ -7,6 +7,7 @@ public class Pawn : Piece {
     public bool hasMoved;
 
     public Pawn(Space space, Colour colour) : base(space, colour) {
+        GameEvents.getReachableOrAttackingSpaces.AddListener(getReachableSpaces);
         value = 1;
 
         if (colour == Colour.WHITE) {
@@ -35,13 +36,23 @@ public class Pawn : Piece {
         }
 
         // Add diagonals.
+        Space spaceObserved;
         // Lower file.
-        if (rank % 7 >= 1 && file >= 1 && !board[file - 1, rank + direction].isEmpty && board[file - 1, rank + direction].piece.colour != colour) {
-            reachableSpaces.Add(board[file - 1, rank + direction]);
+        if (rank % 7 >= 1 && file >= 1) {
+            spaceObserved = board[file - 1, rank + direction];
+            spaceObserved.setBeingAttacked(colour);
+            if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour) {
+                reachableSpaces.Add(spaceObserved);
+            }
         }
+
         // Higher file.
-        if (rank % 7 >= 1 && file <= 6 && !board[file + 1, rank + direction].isEmpty && board[file + 1, rank + direction].piece.colour != colour) {
-            reachableSpaces.Add(board[file + 1, rank + direction]);
+        if (rank % 7 >= 1 && file <= 6) {
+            spaceObserved = board[file + 1, rank + direction];
+            spaceObserved.setBeingAttacked(colour);
+            if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour) {
+                reachableSpaces.Add(spaceObserved);
+            }
         }
     }
 

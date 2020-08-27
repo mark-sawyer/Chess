@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bishop : OrthoDiagPiece {
     public Bishop(Space space, Colour colour) : base(space, colour) {
+        GameEvents.getReachableOrAttackingSpaces.AddListener(getReachableSpaces);
         value = 3;
         isOrtho = false;
         isDiag = true;
