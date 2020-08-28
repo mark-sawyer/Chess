@@ -21,7 +21,7 @@ public class Pawn : Piece {
     }
 
     public override void getPlayableMoves() {
-        if (justMovedTwo && Board.turn == colour) {
+        if (justMovedTwo && Board.turn != colour) {
             justMovedTwo = false;
         }
 

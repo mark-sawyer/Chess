@@ -5,6 +5,7 @@ using UnityEngine;
 public class Team {
     public Space[,] board;
     public List<Piece> alivePieces;
+    public Piece king;
 
     public Team(Colour colour) {
         board = Board.board;
@@ -44,6 +45,7 @@ public class Team {
 
         // King
         board[4, otherPieceRank].setPiece(new King(colour));
+        king = board[4, otherPieceRank].piece;
 
         for (int file = 0; file < 8; file++) {
             alivePieces.Add(board[file, pawnRank].piece);

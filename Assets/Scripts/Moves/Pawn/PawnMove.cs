@@ -17,4 +17,16 @@ public class PawnMove : Move {
 
         base.executeMove();
     }
+
+    public override void undoMove() {
+        if (Mathf.Abs(newSpace.rank - oldSpace.rank) == 2) {
+            movingPiece.justMovedTwo = false;
+            movingPiece.hasMoved = false;
+        }
+        else if ((movingPiece.colour == Colour.WHITE && newSpace.rank == 2) || (movingPiece.colour == Colour.BLACK && newSpace.rank == 5)) {
+            movingPiece.hasMoved = false;
+        }
+
+        base.undoMove();
+    }
 }

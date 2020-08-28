@@ -26,16 +26,23 @@ public class Board : MonoBehaviour {
     }
 
     public static void changeTurn() {
-        if (turn == Colour.WHITE) {
-            turn = Colour.BLACK;
-        }
-        else {
-            turn = Colour.WHITE;
-        }
-
         GameEvents.clearBeingAttacked.Invoke();
         GameEvents.getPlayableMoves.Invoke();
         GameEvents.filterPlayableMoves.Invoke();
+
+        // Change turn and check if the king is in check.
+        if (turn == Colour.WHITE) {
+            turn = Colour.BLACK;
+            if (blackTeam.king.space.isBeingAttackedByWhite) {
+
+            }
+        }
+        else {
+            turn = Colour.WHITE;
+            if (whiteTeam.king.space.isBeingAttackedByBlack) {
+
+            }
+        }
     }
 }
 
