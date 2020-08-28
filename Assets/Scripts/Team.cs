@@ -23,27 +23,27 @@ public class Team {
 
         // Pawns
         for (int file = 0; file < 8; file++) {
-            board[file, pawnRank].setPiece(new Pawn(board[file, pawnRank], colour));
+            board[file, pawnRank].setPiece(new Pawn(colour));
             alivePieces.Add(board[file, pawnRank].piece);
         }
 
         // Rooks
-        board[0, otherPieceRank].setPiece(new Rook(board[0, otherPieceRank], colour));
-        board[7, otherPieceRank].setPiece(new Rook(board[7, otherPieceRank], colour));
+        board[0, otherPieceRank].setPiece(new Rook(colour));
+        board[7, otherPieceRank].setPiece(new Rook(colour));
 
         // Knights
-        board[1, otherPieceRank].setPiece(new Knight(board[1, otherPieceRank], colour));
-        board[6, otherPieceRank].setPiece(new Knight(board[6, otherPieceRank], colour));
+        board[1, otherPieceRank].setPiece(new Knight(colour));
+        board[6, otherPieceRank].setPiece(new Knight(colour));
 
         // Bishops
-        board[2, otherPieceRank].setPiece(new Bishop(board[2, otherPieceRank], colour));
-        board[5, otherPieceRank].setPiece(new Bishop(board[5, otherPieceRank], colour));
+        board[2, otherPieceRank].setPiece(new Bishop(colour));
+        board[5, otherPieceRank].setPiece(new Bishop(colour));
 
         // Queen
-        board[3, otherPieceRank].setPiece(new Queen(board[3, otherPieceRank], colour));
+        board[3, otherPieceRank].setPiece(new Queen(colour));
 
         // King
-        board[4, otherPieceRank].setPiece(new King(board[4, otherPieceRank], colour));
+        board[4, otherPieceRank].setPiece(new King(colour));
 
         for (int file = 0; file < 8; file++) {
             alivePieces.Add(board[file, pawnRank].piece);

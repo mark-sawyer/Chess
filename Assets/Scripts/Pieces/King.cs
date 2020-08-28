@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class King : Piece {
-    public King(Space space, Colour colour) : base(space, colour) {
+    public King(Colour colour) : base(colour) {
         value = 1000;
 
         if (colour == Colour.BLACK) {

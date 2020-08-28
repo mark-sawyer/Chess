@@ -11,12 +11,11 @@ public abstract class Piece {
     public Colour colour;
     public int value;
 
-    public Piece(Space space, Colour colour) {
+    public Piece(Colour colour) {
         GameEvents.setTeam.AddListener(setTeam);
         GameEvents.getPlayableMoves.AddListener(getPlayableMoves);
         GameEvents.filterPlayableMoves.AddListener(filterPlayableMoves);
 
-        this.space = space;
         this.colour = colour;
         board = Board.board;
         playableMoves = new List<Move>();

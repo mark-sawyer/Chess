@@ -5,7 +5,7 @@ using UnityEngine;
 public class Rook : OrthoDiagPiece {
     public bool hasMoved;
 
-    public Rook(Space space, Colour colour) : base(space, colour) {
+    public Rook(Colour colour) : base(colour) {
         value = 5;
         isOrtho = true;
         isDiag = false;

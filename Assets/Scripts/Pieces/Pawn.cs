@@ -6,7 +6,7 @@ public class Pawn : Piece {
     private int direction;
     public bool hasMoved;
 
-    public Pawn(Space space, Colour colour) : base(space, colour) {
+    public Pawn(Colour colour) : base(colour) {
         GameEvents.getPlayableMoves.AddListener(getPlayableMoves);
         value = 1;
 
@@ -22,6 +22,7 @@ public class Pawn : Piece {
     public override void getPlayableMoves() {
         if (space != null) {
             playableMoves.Clear();
+            pin = null;
 
             int file = space.file;
             int rank = space.rank;
@@ -43,7 +44,12 @@ public class Pawn : Piece {
                 spaceObserved = board[file - 1, rank + direction];
                 spaceObserved.setBeingAttacked(colour);
                 if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour) {
-                    playableMoves.Add(new PawnMove(this, spaceObserved));
+                    if (colour == Colour.WHITE) {
+                        playableMoves.Add(new DiagonalPawnMove(this, spaceObserved, Direction.NEGATIVE));
+                    }
+                    else {
+                        playableMoves.Add(new DiagonalPawnMove(this, spaceObserved, Direction.POSITIVE));
+                    }
                 }
             }
 
@@ -52,7 +58,12 @@ public class Pawn : Piece {
                 spaceObserved = board[file + 1, rank + direction];
                 spaceObserved.setBeingAttacked(colour);
                 if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour) {
-                    playableMoves.Add(new PawnMove(this, spaceObserved));
+                    if (colour == Colour.WHITE) {
+                        playableMoves.Add(new DiagonalPawnMove(this, spaceObserved, Direction.POSITIVE));
+                    }
+                    else {
+                        playableMoves.Add(new DiagonalPawnMove(this, spaceObserved, Direction.NEGATIVE));
+                    }
                 }
             }
         }
@@ -68,6 +79,50 @@ public class Pawn : Piece {
     }
 
     public override void filterPlayableMoves() {
+        if (pin != null) {
+            List<Move> movesToRemove = new List<Move>();
+            switch (pin.pinType) {
+                case Direction.HORIZONTAL:
+                    playableMoves.Clear();
+                    break;
 
+                case Direction.VERTICAL:
+                    foreach (Move move in playableMoves) {
+                        if (move is DiagonalPawnMove) {
+                            movesToRemove.Add(move);
+                        }
+                    }
+
+                    foreach (Move move in movesToRemove) {
+                        playableMoves.Remove(move);
+                    }
+
+                    break;
+
+                case Direction.POSITIVE:
+                    foreach (Move move in playableMoves) {
+                        if (!(move is DiagonalPawnMove) || ((DiagonalPawnMove)move).direction != pin.pinType) {
+                            movesToRemove.Add(move);
+                        }
+                    }
+
+                    foreach (Move move in movesToRemove) {
+                        playableMoves.Remove(move);
+                    }
+                    break;
+
+                case Direction.NEGATIVE:
+                    foreach (Move move in playableMoves) {
+                        if (!(move is DiagonalPawnMove) || ((DiagonalPawnMove)move).direction != pin.pinType) {
+                            movesToRemove.Add(move);
+                        }
+                    }
+
+                    foreach (Move move in movesToRemove) {
+                        playableMoves.Remove(move);
+                    }
+                    break;
+            }
+        }
     }
 }

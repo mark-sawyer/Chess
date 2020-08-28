@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Bishop : OrthoDiagPiece {
-    public Bishop(Space space, Colour colour) : base(space, colour) {
+    public Bishop(Colour colour) : base(colour) {
         value = 3;
         isOrtho = false;
         isDiag = true;

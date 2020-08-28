@@ -25,7 +25,18 @@ public class Move {
 
         oldSpace.removePiece();
         newSpace.setPiece(movingPiece);
-        movingPiece.space = newSpace;
+
+        GameEvents.changeTurn.Invoke();
+    }
+
+    public virtual void undoMove() {
+        newSpace.removePiece();
+        oldSpace.setPiece(movingPiece);
+
+        if (takenPiece != null) {
+            newSpace.setPiece(takenPiece);
+            takenPiece.team.alivePieces.Add(takenPiece);
+        }
 
         GameEvents.changeTurn.Invoke();
     }

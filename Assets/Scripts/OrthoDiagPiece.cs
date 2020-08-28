@@ -7,7 +7,7 @@ public abstract class OrthoDiagPiece : Piece {
     public bool isOrtho;
     public bool isDiag;
 
-    public OrthoDiagPiece(Space space, Colour colour) : base(space, colour) { }
+    public OrthoDiagPiece(Colour colour) : base(colour) { }
 
     public override void getPlayableMoves() {
         if (space != null) {

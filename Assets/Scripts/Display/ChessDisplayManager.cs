@@ -10,13 +10,9 @@ public class ChessDisplayManager : MonoBehaviour {
     public GameObject whitePawn;
     public GameObject blackPawn;
 
-    private void Awake() {
-        GameEvents.changeTurn.AddListener(changeBoardDisplay);
-    }
-
     void Start() {
         board = Board.board;
-        changeBoardDisplay();
+        updateBoardDisplay();
     }
 
     void Update() {
@@ -28,7 +24,7 @@ public class ChessDisplayManager : MonoBehaviour {
         }
     }
 
-    public void changeBoardDisplay() {
+    public void updateBoardDisplay() {
         GameObject pieceBeingDisplayed;
         for (int file = 0; file < 8; file++) {
             for (int rank = 0; rank < 8; rank++) {

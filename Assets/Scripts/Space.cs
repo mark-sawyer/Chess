@@ -19,6 +19,7 @@ public class Space {
 
     public void setPiece(Piece newPiece) {
         piece = newPiece;
+        piece.space = this;
         isEmpty = false;
     }
 

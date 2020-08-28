@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Knight : Piece {
-    public Knight(Space space, Colour colour) : base(space, colour) {
+    public Knight(Colour colour) : base(colour) {
         value = 3;
 
         if (colour == Colour.BLACK) {
@@ -14,6 +14,7 @@ public class Knight : Piece {
     public override void getPlayableMoves() {
         if (space != null) {
             playableMoves.Clear();
+            pin = null;
 
             int file = space.file;
             int rank = space.rank;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Queen : OrthoDiagPiece {
-    public Queen(Space space, Colour colour) : base(space, colour) {
+    public Queen(Colour colour) : base(colour) {
         GameEvents.getPlayableMoves.AddListener(getPlayableMoves);
         value = 9;
         isOrtho = true;
