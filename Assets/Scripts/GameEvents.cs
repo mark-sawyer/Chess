@@ -9,4 +9,5 @@ public class GameEvents {
     public static UnityEvent getReachableSpacesKing = new UnityEvent();
     public static UnityEvent changeTurn = new UnityEvent();
     public static UnityEvent clearBeingAttacked = new UnityEvent();
+    public static UnityEvent setTeam = new UnityEvent();
 }

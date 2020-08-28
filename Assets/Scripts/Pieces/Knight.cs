@@ -13,22 +13,24 @@ public class Knight : Piece {
     }
 
     public override void getReachableSpaces() {
-        reachableSpaces.Clear();
+        if (space != null) {
+            reachableSpaces.Clear();
 
-        int file = space.file;
-        int rank = space.rank;
+            int file = space.file;
+            int rank = space.rank;
 
-        checkToAddSpaceObserved(file + 2, rank + 1);
-        checkToAddSpaceObserved(file + 1, rank + 2);
+            checkToAddSpaceObserved(file + 2, rank + 1);
+            checkToAddSpaceObserved(file + 1, rank + 2);
 
-        checkToAddSpaceObserved(file - 2, rank + 1);
-        checkToAddSpaceObserved(file - 1, rank + 2);
+            checkToAddSpaceObserved(file - 2, rank + 1);
+            checkToAddSpaceObserved(file - 1, rank + 2);
 
-        checkToAddSpaceObserved(file + 2, rank - 1);
-        checkToAddSpaceObserved(file + 1, rank - 2);
+            checkToAddSpaceObserved(file + 2, rank - 1);
+            checkToAddSpaceObserved(file + 1, rank - 2);
 
-        checkToAddSpaceObserved(file - 2, rank - 1);
-        checkToAddSpaceObserved(file - 1, rank - 2);
+            checkToAddSpaceObserved(file - 2, rank - 1);
+            checkToAddSpaceObserved(file - 1, rank - 2);
+        }
     }
 
     public void checkToAddSpaceObserved(int checkedFile, int checkedRank) {

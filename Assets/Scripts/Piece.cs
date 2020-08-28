@@ -5,11 +5,15 @@ using UnityEngine;
 public abstract class Piece {
     public Space[,] board;
     public Space space;
+    public Team team;
     public List<Space> reachableSpaces;
+    public Pin pin;
     public Colour colour;
     public int value;
 
     public Piece(Space space, Colour colour) {
+        GameEvents.setTeam.AddListener(setTeam);
+
         this.space = space;
         this.colour = colour;
         board = Board.board;
@@ -21,13 +25,7 @@ public abstract class Piece {
         if (!newSpace.isEmpty) {
             Piece removedPiece = newSpace.piece;
             newSpace.removePiece();
-
-            if (removedPiece.colour == Colour.WHITE) {
-                Board.aliveWhitePieces.Remove(removedPiece);
-            }
-            else {
-                Board.aliveBlackPieces.Remove(removedPiece);
-            }
+            team.alivePieces.Remove(removedPiece);
         }
 
         space.removePiece();
@@ -43,5 +41,14 @@ public abstract class Piece {
 
     public bool inBoardRange(int num) {
         return num >= 0 && num <= 7;
+    }
+
+    private void setTeam() {
+        if (colour == Colour.WHITE) {
+            team = Board.whiteTeam;
+        }
+        else {
+            team = Board.blackTeam;
+        }
     }
 }

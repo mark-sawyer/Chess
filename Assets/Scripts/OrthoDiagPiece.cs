@@ -9,170 +9,241 @@ public abstract class OrthoDiagPiece : Piece {
     public OrthoDiagPiece(Space space, Colour colour) : base(space, colour) { }
 
     public override void getReachableSpaces() {
-        reachableSpaces.Clear();
+        if (space != null) {
+            reachableSpaces.Clear();
 
-        int file = space.file;
-        int rank = space.rank;
-        Space spaceObserved;
+            int file = space.file;
+            int rank = space.rank;
+            Space spaceObserved;
+            Piece possiblePin = null;
 
-        if (isOrtho) {
-            int spaceObservedNum;
+            if (isOrtho) {
+                int spaceObservedNum;
 
-            // Down file
-            spaceObservedNum = file - 1;
-            while (inBoardRange(spaceObservedNum)) {
-                spaceObserved = board[spaceObservedNum, rank];
-                spaceObserved.setBeingAttacked(colour);
 
-                if (spaceObserved.isEmpty) {
-                    reachableSpaces.Add(spaceObserved);
+
+
+
+
+
+
+
+
+                // Down file
+                spaceObservedNum = file - 1;
+                bool observedEnemyPiece = false;
+                while (inBoardRange(spaceObservedNum)) {
+                    spaceObserved = board[spaceObservedNum, rank];
+                    if (!observedEnemyPiece) {
+                        spaceObserved.setBeingAttacked(colour);
+
+                        if (spaceObserved.isEmpty) {
+                            reachableSpaces.Add(spaceObserved);
+                        }
+                        else {
+                            if (spaceObserved.piece.colour != colour) {
+                                reachableSpaces.Add(spaceObserved);
+                                possiblePin = spaceObserved.piece;
+                                observedEnemyPiece = true;
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        if (!spaceObserved.isEmpty) {
+                            if (spaceObserved.piece.colour != colour) {
+                                possiblePin.pin = new Pin(PinType.VERTICAL);
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                    }
+
+                    spaceObservedNum--;
                 }
-                else {
-                    if (spaceObserved.piece.colour != colour) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                // Down file
+                spaceObservedNum = file - 1;
+                while (inBoardRange(spaceObservedNum)) {
+                    spaceObserved = board[spaceObservedNum, rank];
+                    spaceObserved.setBeingAttacked(colour);
+
+                    if (spaceObserved.isEmpty) {
                         reachableSpaces.Add(spaceObserved);
                     }
-                    break;
+                    else {
+                        if (spaceObserved.piece.colour != colour) {
+                            reachableSpaces.Add(spaceObserved);
+                        }
+                        break;
+                    }
+                    spaceObservedNum--;
                 }
-                spaceObservedNum--;
+
+                // Up file
+                spaceObservedNum = file + 1;
+                while (inBoardRange(spaceObservedNum)) {
+                    spaceObserved = board[spaceObservedNum, rank];
+                    spaceObserved.setBeingAttacked(colour);
+
+                    if (spaceObserved.isEmpty) {
+                        reachableSpaces.Add(spaceObserved);
+                    }
+                    else {
+                        if (spaceObserved.piece.colour != colour) {
+                            reachableSpaces.Add(spaceObserved);
+                        }
+                        break;
+                    }
+                    spaceObservedNum++;
+                }
+
+                // Down rank
+                spaceObservedNum = rank - 1;
+                while (spaceObservedNum >= 0) {
+                    spaceObserved = board[file, spaceObservedNum];
+                    spaceObserved.setBeingAttacked(colour);
+
+                    if (spaceObserved.isEmpty) {
+                        reachableSpaces.Add(spaceObserved);
+                    }
+                    else {
+                        if (spaceObserved.piece.colour != colour) {
+                            reachableSpaces.Add(spaceObserved);
+                        }
+                        break;
+                    }
+                    spaceObservedNum--;
+                }
+
+                // Up rank
+                spaceObservedNum = rank + 1;
+                while (spaceObservedNum <= 7) {
+                    spaceObserved = board[file, spaceObservedNum];
+                    spaceObserved.setBeingAttacked(colour);
+
+                    if (spaceObserved.isEmpty) {
+                        reachableSpaces.Add(spaceObserved);
+                    }
+                    else {
+                        if (spaceObserved.piece.colour != colour) {
+                            reachableSpaces.Add(spaceObserved);
+                        }
+                        break;
+                    }
+                    spaceObservedNum++;
+                }
             }
 
-            // Up file
-            spaceObservedNum = file + 1;
-            while (inBoardRange(spaceObservedNum)) {
-                spaceObserved = board[spaceObservedNum, rank];
-                spaceObserved.setBeingAttacked(colour);
+            if (isDiag) {
+                int observedFileNum;
+                int observedRankNum;
 
-                if (spaceObserved.isEmpty) {
-                    reachableSpaces.Add(spaceObserved);
-                }
-                else {
-                    if (spaceObserved.piece.colour != colour) {
+                // Up rank, up file
+                observedFileNum = file + 1;
+                observedRankNum = rank + 1;
+                while (observedFileNum <= 7 && observedRankNum <= 7) {
+                    spaceObserved = board[observedFileNum, observedRankNum];
+                    spaceObserved.setBeingAttacked(colour);
+
+                    if (spaceObserved.isEmpty) {
                         reachableSpaces.Add(spaceObserved);
                     }
-                    break;
+                    else {
+                        if (spaceObserved.piece.colour != colour) {
+                            reachableSpaces.Add(spaceObserved);
+                        }
+                        break;
+                    }
+                    observedFileNum++;
+                    observedRankNum++;
                 }
-                spaceObservedNum++;
-            }
 
-            // Down rank
-            spaceObservedNum = rank - 1;
-            while (spaceObservedNum >= 0) {
-                spaceObserved = board[file, spaceObservedNum];
-                spaceObserved.setBeingAttacked(colour);
+                // Down rank, up file
+                observedFileNum = file + 1;
+                observedRankNum = rank - 1;
+                while (observedFileNum <= 7 && observedRankNum >= 0) {
+                    spaceObserved = board[observedFileNum, observedRankNum];
+                    spaceObserved.setBeingAttacked(colour);
 
-                if (spaceObserved.isEmpty) {
-                    reachableSpaces.Add(spaceObserved);
-                }
-                else {
-                    if (spaceObserved.piece.colour != colour) {
+                    if (spaceObserved.isEmpty) {
                         reachableSpaces.Add(spaceObserved);
                     }
-                    break;
+                    else {
+                        if (spaceObserved.piece.colour != colour) {
+                            reachableSpaces.Add(spaceObserved);
+                        }
+                        break;
+                    }
+                    observedFileNum++;
+                    observedRankNum--;
                 }
-                spaceObservedNum--;
-            }
 
-            // Up rank
-            spaceObservedNum = rank + 1;
-            while (spaceObservedNum <= 7) {
-                spaceObserved = board[file, spaceObservedNum];
-                spaceObserved.setBeingAttacked(colour);
+                // Down rank, down file
+                observedFileNum = file - 1;
+                observedRankNum = rank - 1;
+                while (observedFileNum >= 0 && observedRankNum >= 0) {
+                    spaceObserved = board[observedFileNum, observedRankNum];
+                    spaceObserved.setBeingAttacked(colour);
 
-                if (spaceObserved.isEmpty) {
-                    reachableSpaces.Add(spaceObserved);
-                }
-                else {
-                    if (spaceObserved.piece.colour != colour) {
+                    if (spaceObserved.isEmpty) {
                         reachableSpaces.Add(spaceObserved);
                     }
-                    break;
+                    else {
+                        if (spaceObserved.piece.colour != colour) {
+                            reachableSpaces.Add(spaceObserved);
+                        }
+                        break;
+                    }
+                    observedFileNum--;
+                    observedRankNum--;
                 }
-                spaceObservedNum++;
-            }
-        }
 
-        if (isDiag) {
-            int observedFileNum;
-            int observedRankNum;
+                // Up rank, down file
+                observedFileNum = file - 1;
+                observedRankNum = rank + 1;
+                while (observedFileNum >= 0 && observedRankNum <= 7) {
+                    spaceObserved = board[observedFileNum, observedRankNum];
+                    spaceObserved.setBeingAttacked(colour);
 
-            // Up rank, up file
-            observedFileNum = file + 1;
-            observedRankNum = rank + 1;
-            while (observedFileNum <= 7 && observedRankNum <= 7) {
-                spaceObserved = board[observedFileNum, observedRankNum];
-                spaceObserved.setBeingAttacked(colour);
-
-                if (spaceObserved.isEmpty) {
-                    reachableSpaces.Add(spaceObserved);
-                }
-                else {
-                    if (spaceObserved.piece.colour != colour) {
+                    if (spaceObserved.isEmpty) {
                         reachableSpaces.Add(spaceObserved);
                     }
-                    break;
-                }
-                observedFileNum++;
-                observedRankNum++;
-            }
-
-            // Down rank, up file
-            observedFileNum = file + 1;
-            observedRankNum = rank - 1;
-            while (observedFileNum <= 7 && observedRankNum >= 0) {
-                spaceObserved = board[observedFileNum, observedRankNum];
-                spaceObserved.setBeingAttacked(colour);
-
-                if (spaceObserved.isEmpty) {
-                    reachableSpaces.Add(spaceObserved);
-                }
-                else {
-                    if (spaceObserved.piece.colour != colour) {
-                        reachableSpaces.Add(spaceObserved);
+                    else {
+                        if (spaceObserved.piece.colour != colour) {
+                            reachableSpaces.Add(spaceObserved);
+                        }
+                        break;
                     }
-                    break;
+                    observedFileNum--;
+                    observedRankNum++;
                 }
-                observedFileNum++;
-                observedRankNum--;
-            }
-
-            // Down rank, down file
-            observedFileNum = file - 1;
-            observedRankNum = rank - 1;
-            while (observedFileNum >= 0 && observedRankNum >= 0) {
-                spaceObserved = board[observedFileNum, observedRankNum];
-                spaceObserved.setBeingAttacked(colour);
-
-                if (spaceObserved.isEmpty) {
-                    reachableSpaces.Add(spaceObserved);
-                }
-                else {
-                    if (spaceObserved.piece.colour != colour) {
-                        reachableSpaces.Add(spaceObserved);
-                    }
-                    break;
-                }
-                observedFileNum--;
-                observedRankNum--;
-            }
-
-            // Up rank, down file
-            observedFileNum = file - 1;
-            observedRankNum = rank + 1;
-            while (observedFileNum >= 0 && observedRankNum <= 7) {
-                spaceObserved = board[observedFileNum, observedRankNum];
-                spaceObserved.setBeingAttacked(colour);
-
-                if (spaceObserved.isEmpty) {
-                    reachableSpaces.Add(spaceObserved);
-                }
-                else {
-                    if (spaceObserved.piece.colour != colour) {
-                        reachableSpaces.Add(spaceObserved);
-                    }
-                    break;
-                }
-                observedFileNum--;
-                observedRankNum++;
             }
         }
     }

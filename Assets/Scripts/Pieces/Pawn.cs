@@ -20,38 +20,40 @@ public class Pawn : Piece {
     }
 
     public override void getReachableSpaces() {
-        reachableSpaces.Clear();
+        if (space != null) {
+            reachableSpaces.Clear();
 
-        int file = space.file;
-        int rank = space.rank;
+            int file = space.file;
+            int rank = space.rank;
 
-        // Add space ahead if empty.
-        if (rank % 7 >= 1 && board[file, rank + direction].isEmpty) {
-            reachableSpaces.Add(board[file, rank + direction]);
+            // Add space ahead if empty.
+            if (rank % 7 >= 1 && board[file, rank + direction].isEmpty) {
+                reachableSpaces.Add(board[file, rank + direction]);
 
-            // Add two spaces ahead if empty and the pawn hasn't moved.
-            if (!hasMoved && board[file, rank + (2 * direction)].isEmpty) {
-                reachableSpaces.Add(board[file, rank + (2 * direction)]);
+                // Add two spaces ahead if empty and the pawn hasn't moved.
+                if (!hasMoved && board[file, rank + (2 * direction)].isEmpty) {
+                    reachableSpaces.Add(board[file, rank + (2 * direction)]);
+                }
             }
-        }
 
-        // Add diagonals.
-        Space spaceObserved;
-        // Lower file.
-        if (rank % 7 >= 1 && file >= 1) {
-            spaceObserved = board[file - 1, rank + direction];
-            spaceObserved.setBeingAttacked(colour);
-            if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour) {
-                reachableSpaces.Add(spaceObserved);
+            // Add diagonals.
+            Space spaceObserved;
+            // Lower file.
+            if (rank % 7 >= 1 && file >= 1) {
+                spaceObserved = board[file - 1, rank + direction];
+                spaceObserved.setBeingAttacked(colour);
+                if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour) {
+                    reachableSpaces.Add(spaceObserved);
+                }
             }
-        }
 
-        // Higher file.
-        if (rank % 7 >= 1 && file <= 6) {
-            spaceObserved = board[file + 1, rank + direction];
-            spaceObserved.setBeingAttacked(colour);
-            if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour) {
-                reachableSpaces.Add(spaceObserved);
+            // Higher file.
+            if (rank % 7 >= 1 && file <= 6) {
+                spaceObserved = board[file + 1, rank + direction];
+                spaceObserved.setBeingAttacked(colour);
+                if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour) {
+                    reachableSpaces.Add(spaceObserved);
+                }
             }
         }
     }

@@ -23,6 +23,7 @@ public class Space {
     }
 
     public void removePiece() {
+        piece.space = null;
         piece = null;
         isEmpty = true;
     }
