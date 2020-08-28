@@ -5,7 +5,7 @@ using UnityEngine;
 public class DiagonalPawnMove : PawnMove {
     public Direction direction;
 
-    public DiagonalPawnMove(Piece movingPiece, Space afterSpace, Direction direction) : base(movingPiece, afterSpace) {
+    public DiagonalPawnMove(Pawn movingPiece, Space newSpace, Direction direction) : base(movingPiece, newSpace) {
         this.direction = direction;
     }
 }

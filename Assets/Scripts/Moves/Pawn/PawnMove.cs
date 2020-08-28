@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PawnMove : Move {
-    public PawnMove(Piece movingPiece, Space afterSpace) : base(movingPiece, afterSpace) { }
+    new public Pawn movingPiece;
+
+    public PawnMove(Pawn movingPiece, Space newSpace) : base(movingPiece, newSpace) {
+        this.movingPiece = movingPiece;
+    }
 
     public override void executeMove() {
-        ((Pawn)movingPiece).hasMoved = true;
+        movingPiece.hasMoved = true;
+        if (Mathf.Abs(newSpace.rank - oldSpace.rank) == 2) {
+            movingPiece.justMovedTwo = true;
+        }
 
         base.executeMove();
     }

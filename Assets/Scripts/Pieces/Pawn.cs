@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Pawn : Piece {
-    private int direction;
+    public int direction;
     public bool hasMoved;
+    public bool justMovedTwo;
 
     public Pawn(Colour colour) : base(colour) {
         GameEvents.getPlayableMoves.AddListener(getPlayableMoves);
@@ -20,6 +21,10 @@ public class Pawn : Piece {
     }
 
     public override void getPlayableMoves() {
+        if (justMovedTwo && Board.turn == colour) {
+            justMovedTwo = false;
+        }
+
         if (space != null) {
             playableMoves.Clear();
             pin = null;
@@ -39,7 +44,7 @@ public class Pawn : Piece {
 
             // Add diagonals.
             Space spaceObserved;
-            // Lower file.
+            // Lower file
             if (rank % 7 >= 1 && file >= 1) {
                 spaceObserved = board[file - 1, rank + direction];
                 spaceObserved.setBeingAttacked(colour);
@@ -51,9 +56,22 @@ public class Pawn : Piece {
                         playableMoves.Add(new DiagonalPawnMove(this, spaceObserved, Direction.POSITIVE));
                     }
                 }
+
+                // En passant
+                else if ((colour == Colour.WHITE && rank == 4) || (colour == Colour.BLACK && rank == 3)) {
+                    spaceObserved = board[file - 1, rank];
+                    if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour && spaceObserved.piece is Pawn && ((Pawn)spaceObserved.piece).justMovedTwo) {
+                        if (colour == Colour.WHITE) {
+                            playableMoves.Add(new EnPassantMove(this, spaceObserved, Direction.NEGATIVE));
+                        }
+                        else {
+                            playableMoves.Add(new EnPassantMove(this, spaceObserved, Direction.POSITIVE));
+                        }
+                    }
+                }
             }
 
-            // Higher file.
+            // Higher file
             if (rank % 7 >= 1 && file <= 6) {
                 spaceObserved = board[file + 1, rank + direction];
                 spaceObserved.setBeingAttacked(colour);
@@ -63,6 +81,19 @@ public class Pawn : Piece {
                     }
                     else {
                         playableMoves.Add(new DiagonalPawnMove(this, spaceObserved, Direction.NEGATIVE));
+                    }
+                }
+
+                // En passant
+                else if ((colour == Colour.WHITE && rank == 4) || (colour == Colour.BLACK && rank == 3)) {
+                    spaceObserved = board[file + 1, rank];
+                    if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour && spaceObserved.piece is Pawn && ((Pawn)spaceObserved.piece).justMovedTwo) {
+                        if (colour == Colour.WHITE) {
+                            playableMoves.Add(new EnPassantMove(this, spaceObserved, Direction.POSITIVE));
+                        }
+                        else {
+                            playableMoves.Add(new EnPassantMove(this, spaceObserved, Direction.NEGATIVE));
+                        }
                     }
                 }
             }
