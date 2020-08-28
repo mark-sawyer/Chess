@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Knight : Piece {
     public Knight(Space space, Colour colour) : base(space, colour) {
-        GameEvents.getReachableOrAttackingSpaces.AddListener(getReachableSpaces);
         value = 3;
 
         if (colour == Colour.BLACK) {
@@ -12,24 +11,26 @@ public class Knight : Piece {
         }
     }
 
-    public override void getReachableSpaces() {
+    public override void getPlayableMoves() {
         if (space != null) {
-            reachableSpaces.Clear();
+            playableMoves.Clear();
 
             int file = space.file;
             int rank = space.rank;
 
-            checkToAddSpaceObserved(file + 2, rank + 1);
-            checkToAddSpaceObserved(file + 1, rank + 2);
+            if (pin == null) {
+                checkToAddSpaceObserved(file + 2, rank + 1);
+                checkToAddSpaceObserved(file + 1, rank + 2);
 
-            checkToAddSpaceObserved(file - 2, rank + 1);
-            checkToAddSpaceObserved(file - 1, rank + 2);
+                checkToAddSpaceObserved(file - 2, rank + 1);
+                checkToAddSpaceObserved(file - 1, rank + 2);
 
-            checkToAddSpaceObserved(file + 2, rank - 1);
-            checkToAddSpaceObserved(file + 1, rank - 2);
+                checkToAddSpaceObserved(file + 2, rank - 1);
+                checkToAddSpaceObserved(file + 1, rank - 2);
 
-            checkToAddSpaceObserved(file - 2, rank - 1);
-            checkToAddSpaceObserved(file - 1, rank - 2);
+                checkToAddSpaceObserved(file - 2, rank - 1);
+                checkToAddSpaceObserved(file - 1, rank - 2);
+            }
         }
     }
 
@@ -39,7 +40,7 @@ public class Knight : Piece {
             spaceObserved.setBeingAttacked(colour);
 
             if (spaceObserved.isEmpty || spaceObserved.piece.colour != colour) {
-                reachableSpaces.Add(spaceObserved);
+                playableMoves.Add(new Move(this, spaceObserved));
             }
         }
     }
@@ -50,6 +51,12 @@ public class Knight : Piece {
         }
         else {
             return Resources.Load<GameObject>("Black/black knight");
+        }
+    }
+
+    public override void filterPlayableMoves() {
+        if (pin != null) {
+            playableMoves.Clear();
         }
     }
 }

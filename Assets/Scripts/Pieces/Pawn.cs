@@ -7,7 +7,7 @@ public class Pawn : Piece {
     public bool hasMoved;
 
     public Pawn(Space space, Colour colour) : base(space, colour) {
-        GameEvents.getReachableOrAttackingSpaces.AddListener(getReachableSpaces);
+        GameEvents.getPlayableMoves.AddListener(getPlayableMoves);
         value = 1;
 
         if (colour == Colour.WHITE) {
@@ -19,20 +19,20 @@ public class Pawn : Piece {
         }
     }
 
-    public override void getReachableSpaces() {
+    public override void getPlayableMoves() {
         if (space != null) {
-            reachableSpaces.Clear();
+            playableMoves.Clear();
 
             int file = space.file;
             int rank = space.rank;
 
             // Add space ahead if empty.
             if (rank % 7 >= 1 && board[file, rank + direction].isEmpty) {
-                reachableSpaces.Add(board[file, rank + direction]);
+                playableMoves.Add(new PawnMove(this, board[file, rank + direction]));
 
                 // Add two spaces ahead if empty and the pawn hasn't moved.
                 if (!hasMoved && board[file, rank + (2 * direction)].isEmpty) {
-                    reachableSpaces.Add(board[file, rank + (2 * direction)]);
+                    playableMoves.Add(new PawnMove(this, board[file, rank + (2 * direction)]));
                 }
             }
 
@@ -43,7 +43,7 @@ public class Pawn : Piece {
                 spaceObserved = board[file - 1, rank + direction];
                 spaceObserved.setBeingAttacked(colour);
                 if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour) {
-                    reachableSpaces.Add(spaceObserved);
+                    playableMoves.Add(new PawnMove(this, spaceObserved));
                 }
             }
 
@@ -52,16 +52,10 @@ public class Pawn : Piece {
                 spaceObserved = board[file + 1, rank + direction];
                 spaceObserved.setBeingAttacked(colour);
                 if (!spaceObserved.isEmpty && spaceObserved.piece.colour != colour) {
-                    reachableSpaces.Add(spaceObserved);
+                    playableMoves.Add(new PawnMove(this, spaceObserved));
                 }
             }
         }
-    }
-
-    public override void setPosition(Space newSpace) {
-        hasMoved = true;
-
-        base.setPosition(newSpace);
     }
 
     public override GameObject getGameObject() {
@@ -71,5 +65,9 @@ public class Pawn : Piece {
         else {
             return Resources.Load<GameObject>("Black/black pawn");
         }
+    }
+
+    public override void filterPlayableMoves() {
+
     }
 }

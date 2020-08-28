@@ -6,7 +6,6 @@ public class Rook : OrthoDiagPiece {
     public bool hasMoved;
 
     public Rook(Space space, Colour colour) : base(space, colour) {
-        GameEvents.getReachableOrAttackingSpaces.AddListener(getReachableSpaces);
         value = 5;
         isOrtho = true;
         isDiag = false;
@@ -14,12 +13,6 @@ public class Rook : OrthoDiagPiece {
         if (colour == Colour.BLACK) {
             value *= -1;
         }
-    }
-
-    public override void setPosition(Space newSpace) {
-        hasMoved = true;
-
-        base.setPosition(newSpace);
     }
 
     public override GameObject getGameObject() {

@@ -3,16 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Pin {
-    public PinType pinType;
+    public Direction pinType;
 
-    public Pin(PinType pinType) {
+    public Pin(Direction pinType) {
         this.pinType = pinType;
     }
 }
-
-public enum PinType {
-    HORIZONTAL,
-    VERTICAL,
-    POSITIVE,
-    NEGATIVE
-};

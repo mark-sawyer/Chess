@@ -6,36 +6,23 @@ public abstract class Piece {
     public Space[,] board;
     public Space space;
     public Team team;
-    public List<Space> reachableSpaces;
+    public List<Move> playableMoves;
     public Pin pin;
     public Colour colour;
     public int value;
 
     public Piece(Space space, Colour colour) {
         GameEvents.setTeam.AddListener(setTeam);
+        GameEvents.getPlayableMoves.AddListener(getPlayableMoves);
+        GameEvents.filterPlayableMoves.AddListener(filterPlayableMoves);
 
         this.space = space;
         this.colour = colour;
         board = Board.board;
-        reachableSpaces = new List<Space>();
+        playableMoves = new List<Move>();
     }
 
-    public virtual void setPosition(Space newSpace) {
-        // Check if a piece is being taken.
-        if (!newSpace.isEmpty) {
-            Piece removedPiece = newSpace.piece;
-            newSpace.removePiece();
-            team.alivePieces.Remove(removedPiece);
-        }
-
-        space.removePiece();
-        space = newSpace;
-        space.setPiece(this);
-
-        GameEvents.changeTurn.Invoke();
-    }
-
-    public abstract void getReachableSpaces();
+    public abstract void getPlayableMoves();
 
     public abstract GameObject getGameObject();
 
@@ -51,4 +38,15 @@ public abstract class Piece {
             team = Board.blackTeam;
         }
     }
+
+    public Move getMoveMatchingToSpace(Space space) {
+        foreach (Move move in playableMoves) {
+            if (move.newSpace == space) {
+                return move;
+            }
+        }
+        return null;
+    }
+
+    public abstract void filterPlayableMoves();
 }

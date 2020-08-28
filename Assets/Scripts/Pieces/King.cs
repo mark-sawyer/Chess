@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class King : Piece {
     public King(Space space, Colour colour) : base(space, colour) {
-        GameEvents.getReachableOrAttackingSpaces.AddListener(setAttackingSpaces);
-        GameEvents.getReachableSpacesKing.AddListener(getReachableSpaces);
         value = 1000;
 
         if (colour == Colour.BLACK) {
@@ -13,7 +11,8 @@ public class King : Piece {
         }
     }
 
-    public override void getReachableSpaces() {
+    public override void getPlayableMoves() {
+        playableMoves.Clear();
         int file = space.file;
         int rank = space.rank;
 
@@ -27,21 +26,6 @@ public class King : Piece {
         setReaching(file - 1, rank + 1);
     }
 
-    public void setAttackingSpaces() {
-        reachableSpaces.Clear();
-        int file = space.file;
-        int rank = space.rank;
-
-        setAttacking(file, rank + 1);
-        setAttacking(file + 1, rank + 1);
-        setAttacking(file + 1, rank);
-        setAttacking(file + 1, rank - 1);
-        setAttacking(file, rank - 1);
-        setAttacking(file - 1, rank - 1);
-        setAttacking(file - 1, rank);
-        setAttacking(file - 1, rank + 1);
-    }
-
     public override GameObject getGameObject() {
         if (colour == Colour.WHITE) {
             return Resources.Load<GameObject>("White/white king");
@@ -51,27 +35,33 @@ public class King : Piece {
         }
     }
 
-    private bool safeToGoOn(Space space) {
-        if (colour == Colour.WHITE) {
-            return !space.isBeingAttackedByBlack;
-        }
-        else {
-            return !space.isBeingAttackedByWhite;
-        }
-    }
-
     private void setReaching(int goalFile, int goalRank) {
         if (inBoardRange(goalFile) && inBoardRange(goalRank)) {
             Space spaceObserved = board[goalFile, goalRank];
-            if (safeToGoOn(spaceObserved) && (spaceObserved.isEmpty || spaceObserved.piece.colour != colour)) {
-                reachableSpaces.Add(spaceObserved);
+            if (spaceObserved.isEmpty || spaceObserved.piece.colour != colour) {
+                spaceObserved.setBeingAttacked(colour);
+                playableMoves.Add(new Move(this, spaceObserved));
             }
         }
     }
 
-    private void setAttacking(int goalFile, int goalRank) {
-        if (inBoardRange(goalFile) && inBoardRange(goalRank)) {
-            board[goalFile, goalRank].setBeingAttacked(colour);
+    public override void filterPlayableMoves() {
+        List<Move> movesToRemove = new List<Move>();
+        foreach (Move move in playableMoves) {
+            if (colour == Colour.WHITE) {
+                if (move.newSpace.isBeingAttackedByBlack) {
+                    movesToRemove.Add(move);
+                }
+            }
+            else {
+                if (move.newSpace.isBeingAttackedByWhite) {
+                    movesToRemove.Add(move);
+                }
+            }
+        }
+
+        foreach (Move move in movesToRemove) {
+            playableMoves.Remove(move);
         }
     }
 }

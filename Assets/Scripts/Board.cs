@@ -22,7 +22,7 @@ public class Board : MonoBehaviour {
         whiteTeam = new Team(Colour.WHITE);
         blackTeam = new Team(Colour.BLACK);
         GameEvents.setTeam.Invoke();
-        GameEvents.getReachableOrAttackingSpaces.Invoke();
+        GameEvents.getPlayableMoves.Invoke();
     }
 
     public static void changeTurn() {
@@ -34,12 +34,19 @@ public class Board : MonoBehaviour {
         }
 
         GameEvents.clearBeingAttacked.Invoke();
-        GameEvents.getReachableOrAttackingSpaces.Invoke();
-        GameEvents.getReachableSpacesKing.Invoke();
+        GameEvents.getPlayableMoves.Invoke();
+        GameEvents.filterPlayableMoves.Invoke();
     }
 }
 
 public enum Colour {
     WHITE,
     BLACK
+};
+
+public enum Direction {
+    HORIZONTAL,
+    VERTICAL,
+    POSITIVE,
+    NEGATIVE
 };
