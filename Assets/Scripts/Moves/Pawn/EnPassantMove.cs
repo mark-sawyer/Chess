@@ -29,5 +29,6 @@ public class EnPassantMove : DiagonalPawnMove {
 
         movingPiece.timesMoved--;
         Board.turnNum--;
+        Board.gameIsOver = false;
     }
 }

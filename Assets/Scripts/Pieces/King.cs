@@ -3,27 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class King : Piece {
-    public King(Colour colour) : base(colour) {
-        value = 1000;
-
-        if (colour == Colour.BLACK) {
-            value *= -1;
-        }
-    }
+    public King(Colour colour) : base(colour) { }
 
     public override void getPlayableMoves() {
-        playableMoves.Clear();
-        int file = space.file;
-        int rank = space.rank;
+        if (space != null) {
+            playableMoves.Clear();
+            int file = space.file;
+            int rank = space.rank;
 
-        setReaching(file, rank + 1);
-        setReaching(file + 1, rank + 1);
-        setReaching(file + 1, rank);
-        setReaching(file + 1, rank - 1);
-        setReaching(file, rank - 1);
-        setReaching(file - 1, rank - 1);
-        setReaching(file - 1, rank);
-        setReaching(file - 1, rank + 1);
+            setReaching(file, rank + 1);
+            setReaching(file + 1, rank + 1);
+            setReaching(file + 1, rank);
+            setReaching(file + 1, rank - 1);
+            setReaching(file, rank - 1);
+            setReaching(file - 1, rank - 1);
+            setReaching(file - 1, rank);
+            setReaching(file - 1, rank + 1);
+        }
     }
 
     public override GameObject getGameObject() {

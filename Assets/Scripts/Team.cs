@@ -54,9 +54,10 @@ public class Team {
         }
     }
 
-    public void filterToOutOfCheckMoves() {
+    public bool isCheckmated() {
         List<List<Move>> movesToRemoveList = new List<List<Move>>();
         List<Move> movesToRemove;
+        int totalPlayableMoves = 0;
 
         foreach (Piece piece in alivePieces) {
             // Create copy of playableMoves
@@ -71,6 +72,7 @@ public class Team {
                 move.executeMove();
                 GameEvents.clearBeingAttacked.Invoke();
                 GameEvents.getPlayableMoves.Invoke();
+                GameEvents.filterPlayableMoves.Invoke();
 
                 if (colour == Colour.WHITE) {
                     if (king.space.isBeingAttackedByBlack) {
@@ -86,6 +88,7 @@ public class Team {
                 move.undoMove();
                 GameEvents.clearBeingAttacked.Invoke();
                 GameEvents.getPlayableMoves.Invoke();
+                GameEvents.filterPlayableMoves.Invoke();
             }
 
             // Add the moves to filter out to the list of lists.
@@ -108,6 +111,10 @@ public class Team {
             foreach (Move move in movesToRemove) {
                 alivePieces[i].playableMoves.Remove(move);
             }
+
+            totalPlayableMoves += alivePieces[i].playableMoves.Count;
         }
+
+        return totalPlayableMoves == 0;
     }
 }

@@ -24,7 +24,6 @@ public class Pawn : Piece {
     public override void getPlayableMoves() {
         if (space != null) {
             playableMoves.Clear();
-            pin = null;
 
             int file = space.file;
             int rank = space.rank;
@@ -110,48 +109,53 @@ public class Pawn : Piece {
 
     public override void filterPlayableMoves() {
         if (pin != null) {
-            List<Move> movesToRemove = new List<Move>();
-            switch (pin.pinType) {
-                case Direction.HORIZONTAL:
-                    playableMoves.Clear();
-                    break;
+            if (pin.turnPinned == Board.turnNum) {
+                List<Move> movesToRemove = new List<Move>();
+                switch (pin.pinType) {
+                    case Direction.HORIZONTAL:
+                        playableMoves.Clear();
+                        break;
 
-                case Direction.VERTICAL:
-                    foreach (Move move in playableMoves) {
-                        if (move is DiagonalPawnMove) {
-                            movesToRemove.Add(move);
+                    case Direction.VERTICAL:
+                        foreach (Move move in playableMoves) {
+                            if (move is DiagonalPawnMove) {
+                                movesToRemove.Add(move);
+                            }
                         }
-                    }
 
-                    foreach (Move move in movesToRemove) {
-                        playableMoves.Remove(move);
-                    }
-
-                    break;
-
-                case Direction.POSITIVE:
-                    foreach (Move move in playableMoves) {
-                        if (!(move is DiagonalPawnMove) || ((DiagonalPawnMove)move).direction != pin.pinType) {
-                            movesToRemove.Add(move);
+                        foreach (Move move in movesToRemove) {
+                            playableMoves.Remove(move);
                         }
-                    }
 
-                    foreach (Move move in movesToRemove) {
-                        playableMoves.Remove(move);
-                    }
-                    break;
+                        break;
 
-                case Direction.NEGATIVE:
-                    foreach (Move move in playableMoves) {
-                        if (!(move is DiagonalPawnMove) || ((DiagonalPawnMove)move).direction != pin.pinType) {
-                            movesToRemove.Add(move);
+                    case Direction.POSITIVE:
+                        foreach (Move move in playableMoves) {
+                            if (!(move is DiagonalPawnMove) || ((DiagonalPawnMove)move).direction != pin.pinType) {
+                                movesToRemove.Add(move);
+                            }
                         }
-                    }
 
-                    foreach (Move move in movesToRemove) {
-                        playableMoves.Remove(move);
-                    }
-                    break;
+                        foreach (Move move in movesToRemove) {
+                            playableMoves.Remove(move);
+                        }
+                        break;
+
+                    case Direction.NEGATIVE:
+                        foreach (Move move in playableMoves) {
+                            if (!(move is DiagonalPawnMove) || ((DiagonalPawnMove)move).direction != pin.pinType) {
+                                movesToRemove.Add(move);
+                            }
+                        }
+
+                        foreach (Move move in movesToRemove) {
+                            playableMoves.Remove(move);
+                        }
+                        break;
+                }
+            }
+            else {
+                pin = null;
             }
         }
     }

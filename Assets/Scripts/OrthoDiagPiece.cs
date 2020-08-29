@@ -12,7 +12,6 @@ public abstract class OrthoDiagPiece : Piece {
     public override void getPlayableMoves() {
         if (space != null) {
             playableMoves.Clear();
-            pin = null;
 
             if (isOrtho) {
                 // Down file
@@ -89,7 +88,7 @@ public abstract class OrthoDiagPiece : Piece {
             else {
                 if (!spaceObserved.isEmpty) {
                     if (spaceObserved.piece is King && spaceObserved.piece.colour != colour) {
-                        possiblyPinnedPiece.pin = new Pin(moveDirection);
+                        possiblyPinnedPiece.pin = new Pin(moveDirection, Board.turnNum);
                     }
                     break;
                 }
@@ -136,7 +135,7 @@ public abstract class OrthoDiagPiece : Piece {
             else {
                 if (!spaceObserved.isEmpty) {
                     if (spaceObserved.piece is King && spaceObserved.piece.colour != colour) {
-                        possiblyPinnedPiece.pin = new Pin(moveDirection);
+                        possiblyPinnedPiece.pin = new Pin(moveDirection, Board.turnNum);
                     }
                     break;
                 }
@@ -149,16 +148,21 @@ public abstract class OrthoDiagPiece : Piece {
 
     public override void filterPlayableMoves() {
         if (pin != null) {
-            List<Move> movesToRemove = new List<Move>();
-            foreach (OrthoDiagMove move in playableMoves) {
-                if (move.direction != pin.pinType) {
-                    movesToRemove.Add(move);
+            if (pin.turnPinned == Board.turnNum) {
+                List<Move> movesToRemove = new List<Move>();
+                foreach (OrthoDiagMove move in playableMoves) {
+                    if (move.direction != pin.pinType) {
+                        movesToRemove.Add(move);
+                    }
+                }
+
+                foreach (Move move in movesToRemove) {
+                    playableMoves.Remove(move);
                 }
             }
-
-            foreach(Move move in movesToRemove) {
-                playableMoves.Remove(move);
-            }
+        }
+        else {
+            pin = null;
         }
     }
 }

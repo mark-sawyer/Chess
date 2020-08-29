@@ -14,7 +14,6 @@ public class Knight : Piece {
     public override void getPlayableMoves() {
         if (space != null) {
             playableMoves.Clear();
-            pin = null;
 
             int file = space.file;
             int rank = space.rank;
@@ -57,7 +56,12 @@ public class Knight : Piece {
 
     public override void filterPlayableMoves() {
         if (pin != null) {
-            playableMoves.Clear();
+            if (pin.turnPinned == Board.turnNum) {
+                playableMoves.Clear();
+            }
+            else {
+                pin = null;
+            }
         }
     }
 }

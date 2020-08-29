@@ -8,6 +8,9 @@ public class Board : MonoBehaviour {
     public static Team whiteTeam;
     public static Team blackTeam;
     public static int turnNum;
+    public static bool gameIsOver;
+    public static bool whiteIsAI;
+    public static bool blackIsAI = true;
 
     private void Awake() {
         GameEvents.changeTurn.AddListener(changeTurn);
@@ -36,14 +39,33 @@ public class Board : MonoBehaviour {
         if (turn == Colour.WHITE) {
             turn = Colour.BLACK;
             if (blackTeam.king.space.isBeingAttackedByWhite) {
-                blackTeam.filterToOutOfCheckMoves();
+                gameIsOver = blackTeam.isCheckmated();
+            }
+
+            if (blackIsAI) {
+                Computer.move();
             }
         }
         else {
             turn = Colour.WHITE;
             if (whiteTeam.king.space.isBeingAttackedByBlack) {
-                whiteTeam.filterToOutOfCheckMoves();
+                gameIsOver = whiteTeam.isCheckmated();
             }
+
+            if (whiteIsAI) {
+                Computer.move();
+            }
+        }
+
+        if (gameIsOver) {
+            if (turn == Colour.WHITE) {
+                Debug.Log("Black wins");
+            }
+            else {
+                Debug.Log("White wins");
+            }
+
+            GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().enabled = false;
         }
     }
 
@@ -54,9 +76,15 @@ public class Board : MonoBehaviour {
 
         if (turn == Colour.WHITE) {
             turn = Colour.BLACK;
+            if (blackTeam.king.space.isBeingAttackedByWhite) {
+                gameIsOver = blackTeam.isCheckmated();
+            }
         }
         else {
             turn = Colour.WHITE;
+            if (whiteTeam.king.space.isBeingAttackedByBlack) {
+                gameIsOver = whiteTeam.isCheckmated();
+            }
         }
     }
 }

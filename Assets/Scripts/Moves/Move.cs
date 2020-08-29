@@ -41,6 +41,7 @@ public class Move {
 
         movingPiece.timesMoved--;
         Board.turnNum--;
+        Board.gameIsOver = false;
     }
 
     public bool isEqual(Move comparisonMove) {

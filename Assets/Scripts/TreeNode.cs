@@ -43,23 +43,32 @@ public class TreeNode {
         }
     }
 
-    public int evaluateBoard() {
-        int value = 0;
+    public void evaluateBoardValue() {
+        int boardValue;
+        if (!Board.gameIsOver) {
+            boardValue = 0;
+            foreach (Piece piece in Board.whiteTeam.alivePieces) {
+                boardValue += piece.value;
+            }
+            foreach (Piece piece in Board.blackTeam.alivePieces) {
+                boardValue += piece.value;
+            }
 
-        foreach (Piece piece in Board.whiteTeam.alivePieces) {
-            value += piece.value;
+            value = boardValue;
         }
-        foreach (Piece piece in Board.blackTeam.alivePieces) {
-            value += piece.value;
-        }
+        else {
+            boardValue = 9999;
+            if (Board.turn == Colour.WHITE) {
+                boardValue *= -1;
+            }
 
-        branchingNodes = null;
-        return value;
+            value = boardValue;
+        }
     }
 
-    public int evaluateBranchValues(Colour teamTurn) {
+    public void evaluateBranchValues() {
         int num;
-        if (teamTurn == Colour.WHITE) {
+        if (Board.turn == Colour.WHITE) {
             num = -9999;
             foreach (TreeNode branchNode in branchingNodes) {
                 if (branchNode.value > num) {
@@ -76,10 +85,6 @@ public class TreeNode {
             }
         }
 
-        if (level != 0) {
-            branchingNodes = null;
-        }
-
-        return num;
+        value = num;
     }
 }
