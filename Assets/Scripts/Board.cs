@@ -46,6 +46,19 @@ public class Board : MonoBehaviour {
             }
         }
     }
+
+    public static void softChangeTurn() {
+        GameEvents.clearBeingAttacked.Invoke();
+        GameEvents.getPlayableMoves.Invoke();
+        GameEvents.filterPlayableMoves.Invoke();
+
+        if (turn == Colour.WHITE) {
+            turn = Colour.BLACK;
+        }
+        else {
+            turn = Colour.WHITE;
+        }
+    }
 }
 
 public enum Colour {

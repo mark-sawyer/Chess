@@ -22,7 +22,6 @@ public class PawnMove : Move {
             movingPiece.setTeam();
             movingPiece.team.alivePieces.Add(movingPiece);
         }
-        Debug.Log("1: " + movingPiece);
 
         base.executeMove();
     }

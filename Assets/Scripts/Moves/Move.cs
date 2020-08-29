@@ -25,8 +25,6 @@ public class Move {
 
         oldSpace.removePiece();
         newSpace.setPiece(movingPiece);
-        Debug.Log("2: " + movingPiece);
-        Debug.Log("");
 
         movingPiece.timesMoved++;
         Board.turnNum++;
