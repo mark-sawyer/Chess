@@ -31,7 +31,7 @@ public abstract class Piece {
         return num >= 0 && num <= 7;
     }
 
-    private void setTeam() {
+    public void setTeam() {
         if (colour == Colour.WHITE) {
             team = Board.whiteTeam;
         }
