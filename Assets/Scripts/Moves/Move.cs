@@ -26,7 +26,8 @@ public class Move {
         oldSpace.removePiece();
         newSpace.setPiece(movingPiece);
 
-        GameEvents.changeTurn.Invoke();
+        movingPiece.timesMoved++;
+        Board.turnNum++;
     }
 
     public virtual void undoMove() {
@@ -38,6 +39,11 @@ public class Move {
             takenPiece.team.alivePieces.Add(takenPiece);
         }
 
-        GameEvents.changeTurn.Invoke();
+        movingPiece.timesMoved--;
+        Board.turnNum--;
+    }
+
+    public bool isEqual(Move comparisonMove) {
+        return newSpace == comparisonMove.newSpace && oldSpace == comparisonMove.oldSpace;
     }
 }

@@ -10,6 +10,7 @@ public abstract class Piece {
     public Pin pin;
     public Colour colour;
     public int value;
+    public int timesMoved;
 
     public Piece(Colour colour) {
         GameEvents.setTeam.AddListener(setTeam);
@@ -19,6 +20,7 @@ public abstract class Piece {
         this.colour = colour;
         board = Board.board;
         playableMoves = new List<Move>();
+        timesMoved = 0;
     }
 
     public abstract void getPlayableMoves();

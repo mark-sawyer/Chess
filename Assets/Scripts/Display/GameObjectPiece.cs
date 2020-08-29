@@ -24,6 +24,7 @@ public class GameObjectPiece : MonoBehaviour {
                     int newRank = ray.collider.GetComponent<ReachableSpace>().rank;
                     Undo.lastMove = piece.getMoveMatchingToSpace(board[newFile, newRank]);  // Don't keep
                     piece.getMoveMatchingToSpace(board[newFile, newRank]).executeMove();
+                    GameEvents.changeTurn.Invoke();
                     GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().updateBoardDisplay();
                 }
                 else {

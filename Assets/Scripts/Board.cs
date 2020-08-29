@@ -7,6 +7,7 @@ public class Board : MonoBehaviour {
     public static Colour turn;
     public static Team whiteTeam;
     public static Team blackTeam;
+    public static int turnNum;
 
     private void Awake() {
         GameEvents.changeTurn.AddListener(changeTurn);
@@ -23,6 +24,7 @@ public class Board : MonoBehaviour {
         blackTeam = new Team(Colour.BLACK);
         GameEvents.setTeam.Invoke();
         GameEvents.getPlayableMoves.Invoke();
+        turnNum = 1;
     }
 
     public static void changeTurn() {
@@ -34,13 +36,13 @@ public class Board : MonoBehaviour {
         if (turn == Colour.WHITE) {
             turn = Colour.BLACK;
             if (blackTeam.king.space.isBeingAttackedByWhite) {
-
+                blackTeam.filterToOutOfCheckMoves();
             }
         }
         else {
             turn = Colour.WHITE;
             if (whiteTeam.king.space.isBeingAttackedByBlack) {
-
+                whiteTeam.filterToOutOfCheckMoves();
             }
         }
     }

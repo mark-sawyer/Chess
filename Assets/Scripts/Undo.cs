@@ -8,6 +8,7 @@ public class Undo : MonoBehaviour {
     void Update() {
         if (Input.GetKeyDown("u") && lastMove != null) {
             lastMove.undoMove();
+            GameEvents.changeTurn.Invoke();
             GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().updateBoardDisplay();
             lastMove = null;
         }

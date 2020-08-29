@@ -17,7 +17,8 @@ public class EnPassantMove : DiagonalPawnMove {
         oldSpace.removePiece();
         newSpace.setPiece(movingPiece);
 
-        GameEvents.changeTurn.Invoke();
+        movingPiece.timesMoved++;
+        Board.turnNum++;
     }
 
     public override void undoMove() {
@@ -25,8 +26,8 @@ public class EnPassantMove : DiagonalPawnMove {
         oldSpace.setPiece(movingPiece);
         takenPieceSpace.setPiece(takenPiece);
         takenPiece.team.alivePieces.Add(takenPiece);
-        ((Pawn)takenPiece).justMovedTwo = true;
 
-        GameEvents.changeTurn.Invoke();
+        movingPiece.timesMoved--;
+        Board.turnNum--;
     }
 }

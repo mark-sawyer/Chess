@@ -10,9 +10,8 @@ public class PawnMove : Move {
     }
 
     public override void executeMove() {
-        movingPiece.hasMoved = true;
         if (Mathf.Abs(newSpace.rank - oldSpace.rank) == 2) {
-            movingPiece.justMovedTwo = true;
+            movingPiece.turnMovedTwo = Board.turnNum;
         }
 
         base.executeMove();
@@ -20,11 +19,7 @@ public class PawnMove : Move {
 
     public override void undoMove() {
         if (Mathf.Abs(newSpace.rank - oldSpace.rank) == 2) {
-            movingPiece.justMovedTwo = false;
-            movingPiece.hasMoved = false;
-        }
-        else if ((movingPiece.colour == Colour.WHITE && newSpace.rank == 2) || (movingPiece.colour == Colour.BLACK && newSpace.rank == 5)) {
-            movingPiece.hasMoved = false;
+            movingPiece.turnMovedTwo = -999;
         }
 
         base.undoMove();
