@@ -9,8 +9,6 @@ public class ChessDisplayManager : MonoBehaviour {
     public GameObject movable;
     public GameObject whitePawn;
     public GameObject blackPawn;
-    public int pause;
-    public bool updateSoon;
 
     void Start() {
         board = Board.board;
@@ -22,15 +20,6 @@ public class ChessDisplayManager : MonoBehaviour {
             RaycastHit2D ray = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 0, pieceLayer);
             if (ray.collider != null && ray.collider.GetComponent<GameObjectPiece>().piece.colour == Board.turn) {
                 ray.collider.GetComponent<GameObjectPiece>().startBeingHeld();
-            }
-        }
-        
-        if (updateSoon) {
-            pause++;
-            if (pause == 60) {
-                updateBoardDisplay();
-                pause = 0;
-                updateSoon = false;
             }
         }
     }

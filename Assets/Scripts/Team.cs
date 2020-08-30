@@ -117,4 +117,13 @@ public class Team {
 
         return totalPlayableMoves == 0;
     }
+
+    public bool isStalemated() {
+        foreach (Piece piece in alivePieces) {
+            if (piece.playableMoves.Count != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

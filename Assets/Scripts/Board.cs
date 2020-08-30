@@ -9,6 +9,7 @@ public class Board : MonoBehaviour {
     public static Team blackTeam;
     public static int turnNum;
     public static bool gameIsOver;
+    public static bool gameIsStalemate;
     public static bool whiteIsAI;
     public static bool blackIsAI = true;
 
@@ -41,9 +42,12 @@ public class Board : MonoBehaviour {
             if (blackTeam.king.space.isBeingAttackedByWhite) {
                 gameIsOver = blackTeam.isCheckmated();
             }
+            else {
+                gameIsStalemate = blackTeam.isStalemated();
+            }
 
-            if (blackIsAI) {
-                Computer.move();
+            if (blackIsAI && !gameIsOver && !gameIsStalemate) {
+                ComputerTimer.willPlay = true;
             }
         }
         else {
@@ -51,9 +55,12 @@ public class Board : MonoBehaviour {
             if (whiteTeam.king.space.isBeingAttackedByBlack) {
                 gameIsOver = whiteTeam.isCheckmated();
             }
+            else {
+                gameIsStalemate = blackTeam.isStalemated();
+            }
 
-            if (whiteIsAI) {
-                Computer.move();
+            if (whiteIsAI && !gameIsOver && !gameIsStalemate) {
+                ComputerTimer.willPlay = true;
             }
         }
 
@@ -65,6 +72,10 @@ public class Board : MonoBehaviour {
                 Debug.Log("White wins");
             }
 
+            GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().enabled = false;
+        }
+        else if (gameIsStalemate) {
+            Debug.Log("Stalemate");
             GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().enabled = false;
         }
     }

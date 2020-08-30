@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class Computer {
     public static Colour colour = Colour.BLACK;
-    public static int maxLevel = 4;
-    public static int iteration = 0;
+    public static int maxLevel = 1;
+    public static int breakNum;
 
     public static void move() {
-        TreeNode zero = new TreeNode(0);
+        TreeNode zero = new TreeNode(0, -999999, 999999);
         miniMax(zero);
 
         List<Move> possibleMoves = new List<Move>();
@@ -26,7 +26,6 @@ public class Computer {
     }
 
     public static void miniMax(TreeNode node) {
-        iteration++;
         if (node.level == maxLevel || Board.gameIsOver) {
             node.evaluateBoardValue();
         }
@@ -34,11 +33,8 @@ public class Computer {
             node.getBranchingNodes();
 
             foreach (TreeNode treeNode in node.branchingNodes) {
-                /*if (Board.board[4, 7].piece is King && Board.board[1, 4].piece is Bishop && Board.board[4, 3].piece is Pawn && Board.board[3, 5].piece is Pawn &&
-                    treeNode.move.movingPiece is King && treeNode.move.newSpace.file == 3 && treeNode.move.newSpace.rank == 6) {
-                    int x = Computer.iteration;
-                    x = x + 0;
-                }*/
+                treeNode.alpha = node.alpha;
+                treeNode.beta = node.beta;
 
                 treeNode.move.executeMove();
                 Board.softChangeTurn();
@@ -47,6 +43,23 @@ public class Computer {
 
                 treeNode.move.undoMove();
                 Board.softChangeTurn();
+
+                if (Board.turn == Colour.WHITE) {
+                    if (treeNode.value > node.alpha) {
+                        node.alpha = treeNode.alpha;
+                    }
+                }
+                else {
+                    if (treeNode.value < node.beta) {
+                        node.beta = treeNode.beta;
+                    }
+                }
+
+                if (node.beta < node.alpha) {
+                    breakNum++;
+                    Debug.Log(breakNum);
+                    break; 
+                }
             }
 
             node.evaluateBranchValues();

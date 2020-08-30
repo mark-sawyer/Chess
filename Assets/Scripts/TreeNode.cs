@@ -7,9 +7,13 @@ public class TreeNode {
     public int value;
     public Move move;
     public List<TreeNode> branchingNodes;
+    public int alpha;
+    public int beta;
 
-    public TreeNode(int level) {
+    public TreeNode(int level, int alpha, int beta) {
         this.level = level;
+        this.alpha = alpha;
+        this.beta = beta;
         branchingNodes = new List<TreeNode>();
     }
 
@@ -55,6 +59,17 @@ public class TreeNode {
             }
 
             value = boardValue;
+
+            if (Board.turn == Colour.BLACK) {
+                if (boardValue > alpha) {
+                    alpha = boardValue;
+                }
+            }
+            else {
+                if (boardValue < beta) {
+                    beta = boardValue;
+                }
+            }
         }
         else {
             boardValue = 9999;
@@ -63,6 +78,17 @@ public class TreeNode {
             }
 
             value = boardValue;
+
+            if (Board.turn == Colour.WHITE) {
+                if (boardValue > alpha) {
+                    alpha = boardValue;
+                }
+            }
+            else {
+                if (boardValue < beta) {
+                    beta = boardValue;
+                }
+            }
         }
     }
 
@@ -86,5 +112,16 @@ public class TreeNode {
         }
 
         value = num;
+
+        if (Board.turn == Colour.WHITE) {
+            if (num > alpha) {
+                alpha = num;
+            }
+        }
+        else {
+            if (num < beta) {
+                beta = num;
+            }
+        }
     }
 }
