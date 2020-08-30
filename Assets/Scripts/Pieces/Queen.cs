@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Queen : OrthoDiagPiece {
+    public Pawn host;
+
     public Queen(Colour colour) : base(colour) {
         GameEvents.getPlayableMoves.AddListener(getPlayableMoves);
         value = 9;
@@ -21,5 +23,9 @@ public class Queen : OrthoDiagPiece {
         else {
             return Resources.Load<GameObject>("Black/black queen");
         }
+    }
+
+    public void removeListener() {
+        GameEvents.getPlayableMoves.RemoveListener(getPlayableMoves);
     }
 }

@@ -11,7 +11,7 @@ public class Board : MonoBehaviour {
     public static bool gameIsOver;
     public static bool gameIsStalemate;
     public static bool whiteIsAI;
-    public static bool blackIsAI = true;
+    public static bool blackIsAI = false;
 
     private void Awake() {
         GameEvents.changeTurn.AddListener(changeTurn);
@@ -40,6 +40,7 @@ public class Board : MonoBehaviour {
         if (turn == Colour.WHITE) {
             turn = Colour.BLACK;
             if (blackTeam.king.space.isBeingAttackedByWhite) {
+                GameObject.Find("chess manager").GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("click"));
                 gameIsOver = blackTeam.isCheckmated();
             }
             else {
@@ -53,6 +54,7 @@ public class Board : MonoBehaviour {
         else {
             turn = Colour.WHITE;
             if (whiteTeam.king.space.isBeingAttackedByBlack) {
+                GameObject.Find("chess manager").GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("click"));
                 gameIsOver = whiteTeam.isCheckmated();
             }
             else {

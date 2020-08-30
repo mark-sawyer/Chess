@@ -11,6 +11,8 @@ public class EnPassantMove : DiagonalPawnMove {
     }
 
     public override void executeMove() {
+        ((Pawn)movingPiece).promotionQueen.space = newSpace;
+
         takenPieceSpace.removePiece();
         takenPiece.team.alivePieces.Remove(takenPiece);
 
@@ -22,6 +24,7 @@ public class EnPassantMove : DiagonalPawnMove {
     }
 
     public override void undoMove() {
+        ((Pawn)movingPiece).promotionQueen.space = oldSpace;
         newSpace.removePiece();
         oldSpace.setPiece(movingPiece);
         takenPieceSpace.setPiece(takenPiece);

@@ -21,9 +21,16 @@ public class Space {
         piece = newPiece;
         piece.space = this;
         isEmpty = false;
+
+        if (newPiece is Pawn) {
+            ((Pawn)newPiece).promotionQueen.space = this;
+        }
     }
 
     public void removePiece() {
+        if (piece == null) {
+            Debug.Log("");
+        }
         piece.space = null;
         piece = null;
         isEmpty = true;

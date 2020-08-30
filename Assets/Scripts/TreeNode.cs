@@ -10,10 +10,8 @@ public class TreeNode {
     public int alpha;
     public int beta;
 
-    public TreeNode(int level, int alpha, int beta) {
+    public TreeNode(int level) {
         this.level = level;
-        this.alpha = alpha;
-        this.beta = beta;
         branchingNodes = new List<TreeNode>();
     }
 
@@ -60,7 +58,7 @@ public class TreeNode {
 
             value = boardValue;
 
-            if (Board.turn == Colour.BLACK) {
+            if (Board.turn == Colour.WHITE ) {
                 if (boardValue > alpha) {
                     alpha = boardValue;
                 }

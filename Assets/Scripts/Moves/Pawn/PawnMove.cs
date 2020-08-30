@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PawnMove : Move {
     public bool promotion;
-    public Piece pawnThatWasPromoted;
 
     public PawnMove(Piece movingPiece, Space newSpace) : base(movingPiece, newSpace) {
         this.movingPiece = movingPiece;
@@ -14,13 +13,10 @@ public class PawnMove : Move {
         if (Mathf.Abs(newSpace.rank - oldSpace.rank) == 2) {
             ((Pawn)movingPiece).turnMovedTwo = Board.turnNum;
         }
-        else if (newSpace.rank % 7 == 0) {
+        else if (newSpace.rank % 7 == 0 && !((Pawn)movingPiece).isPromoted) {
             promotion = true;
-            pawnThatWasPromoted = movingPiece;
-            pawnThatWasPromoted.team.alivePieces.Remove(pawnThatWasPromoted);
-            movingPiece = new Queen(movingPiece.colour);
-            movingPiece.setTeam();
-            movingPiece.team.alivePieces.Add(movingPiece);
+            ((Pawn)movingPiece).isPromoted = true;
+            ((Pawn)movingPiece).value *= 9;
         }
 
         base.executeMove();
@@ -31,9 +27,8 @@ public class PawnMove : Move {
             ((Pawn)movingPiece).turnMovedTwo = -999;
         }
         else if (promotion) {
-            movingPiece.team.alivePieces.Remove(movingPiece);
-            movingPiece.team.alivePieces.Add(pawnThatWasPromoted);
-            movingPiece = pawnThatWasPromoted;
+            ((Pawn)movingPiece).isPromoted = false;
+            ((Pawn)movingPiece).value /= 9;
         }
 
         base.undoMove();

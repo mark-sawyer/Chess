@@ -11,8 +11,10 @@ public abstract class Piece {
     public Colour colour;
     public int value;
     public int timesMoved;
+    public bool isHost;
 
     public Piece(Colour colour) {
+        isHost = true;
         GameEvents.setTeam.AddListener(setTeam);
         GameEvents.getPlayableMoves.AddListener(getPlayableMoves);
         GameEvents.filterPlayableMoves.AddListener(filterPlayableMoves);

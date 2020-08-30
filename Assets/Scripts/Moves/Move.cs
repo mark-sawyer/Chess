@@ -31,6 +31,10 @@ public class Move {
     }
 
     public virtual void undoMove() {
+        if (!movingPiece.isHost) {
+            movingPiece = ((Queen)movingPiece).host;
+        }
+
         newSpace.removePiece();
         oldSpace.setPiece(movingPiece);
 
