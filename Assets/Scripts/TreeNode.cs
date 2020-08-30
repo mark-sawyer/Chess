@@ -47,7 +47,20 @@ public class TreeNode {
 
     public void evaluateBoardValue() {
         int boardValue;
-        if (!Board.gameIsOver) {
+        if (Board.gameIsOver) {
+            value = 9999;
+            if (Board.turn == Colour.WHITE) {
+                value *= -1;
+            }
+
+            alphaBetaPruning();
+        }
+        else if (Board.gameIsStalemate) {
+            value = 0;
+
+            alphaBetaPruning();
+        }
+        else {
             boardValue = 0;
             foreach (Piece piece in Board.whiteTeam.alivePieces) {
                 boardValue += piece.value;
@@ -58,35 +71,7 @@ public class TreeNode {
 
             value = boardValue;
 
-            if (Board.turn == Colour.WHITE ) {
-                if (boardValue > alpha) {
-                    alpha = boardValue;
-                }
-            }
-            else {
-                if (boardValue < beta) {
-                    beta = boardValue;
-                }
-            }
-        }
-        else {
-            boardValue = 9999;
-            if (Board.turn == Colour.WHITE) {
-                boardValue *= -1;
-            }
-
-            value = boardValue;
-
-            if (Board.turn == Colour.WHITE) {
-                if (boardValue > alpha) {
-                    alpha = boardValue;
-                }
-            }
-            else {
-                if (boardValue < beta) {
-                    beta = boardValue;
-                }
-            }
+            alphaBetaPruning();
         }
     }
 
@@ -119,6 +104,19 @@ public class TreeNode {
         else {
             if (num < beta) {
                 beta = num;
+            }
+        }
+    }
+
+    public void alphaBetaPruning() {
+        if (Board.turn == Colour.WHITE) {
+            if (value > alpha) {
+                alpha = value;
+            }
+        }
+        else {
+            if (value < beta) {
+                beta = value;
             }
         }
     }

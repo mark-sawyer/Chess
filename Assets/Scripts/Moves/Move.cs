@@ -18,6 +18,10 @@ public class Move {
     }
 
     public virtual void executeMove() {
+        if (!movingPiece.isHost) {
+            movingPiece = ((Queen)movingPiece).host;
+        }
+
         if (takenPiece != null) {
             newSpace.removePiece();
             takenPiece.team.alivePieces.Remove(takenPiece);
@@ -46,6 +50,7 @@ public class Move {
         movingPiece.timesMoved--;
         Board.turnNum--;
         Board.gameIsOver = false;
+        Board.gameIsStalemate = false;
     }
 
     public bool isEqual(Move comparisonMove) {

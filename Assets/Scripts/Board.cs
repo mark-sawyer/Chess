@@ -10,11 +10,19 @@ public class Board : MonoBehaviour {
     public static int turnNum;
     public static bool gameIsOver;
     public static bool gameIsStalemate;
-    public static bool whiteIsAI;
+    public static bool whiteIsAI = false;
     public static bool blackIsAI = false;
+    public static Computer whiteComputer;
+    public static Computer blackComputer;
 
     private void Awake() {
         GameEvents.changeTurn.AddListener(changeTurn);
+        if (whiteIsAI) {
+            whiteComputer = new Computer(Colour.WHITE, 3);
+        }
+        if (blackIsAI) {
+            blackComputer = new Computer(Colour.BLACK, 2);
+        }
 
         // Create the board.
         for (int file = 0; file < 8; file++) {
@@ -29,6 +37,13 @@ public class Board : MonoBehaviour {
         GameEvents.setTeam.Invoke();
         GameEvents.getPlayableMoves.Invoke();
         turnNum = 1;
+    }
+
+    private void Start() {
+        GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().start();
+        if (whiteIsAI) {
+            ComputerTimer.willPlay = true;
+        }
     }
 
     public static void changeTurn() {
@@ -58,7 +73,7 @@ public class Board : MonoBehaviour {
                 gameIsOver = whiteTeam.isCheckmated();
             }
             else {
-                gameIsStalemate = blackTeam.isStalemated();
+                gameIsStalemate = whiteTeam.isStalemated();
             }
 
             if (whiteIsAI && !gameIsOver && !gameIsStalemate) {
@@ -92,11 +107,17 @@ public class Board : MonoBehaviour {
             if (blackTeam.king.space.isBeingAttackedByWhite) {
                 gameIsOver = blackTeam.isCheckmated();
             }
+            else {
+                gameIsStalemate = blackTeam.isStalemated();
+            }
         }
         else {
             turn = Colour.WHITE;
             if (whiteTeam.king.space.isBeingAttackedByBlack) {
                 gameIsOver = whiteTeam.isCheckmated();
+            }
+            else {
+                gameIsStalemate = whiteTeam.isStalemated();
             }
         }
     }

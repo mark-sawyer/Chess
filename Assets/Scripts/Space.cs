@@ -28,9 +28,6 @@ public class Space {
     }
 
     public void removePiece() {
-        if (piece == null) {
-            Debug.Log("");
-        }
         piece.space = null;
         piece = null;
         isEmpty = true;

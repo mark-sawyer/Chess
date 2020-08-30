@@ -8,7 +8,7 @@ public class ComputerTimer : MonoBehaviour {
     public static bool willPlay;
 
     void Start() {
-        PAUSE_TIMER_START = 1;
+        PAUSE_TIMER_START = 0.2f;
         pauseTimer = PAUSE_TIMER_START;
     }
 
@@ -17,7 +17,12 @@ public class ComputerTimer : MonoBehaviour {
             if (pauseTimer <= 0) {
                 pauseTimer = PAUSE_TIMER_START;
                 willPlay = false;
-                Computer.move();
+                if (Board.turn == Colour.WHITE) {
+                    Board.whiteComputer.move();
+                }
+                else {
+                    Board.blackComputer.move();
+                }
             }
             else {
                 pauseTimer -= Time.deltaTime;

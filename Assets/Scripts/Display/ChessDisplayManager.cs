@@ -10,7 +10,7 @@ public class ChessDisplayManager : MonoBehaviour {
     public GameObject whitePawn;
     public GameObject blackPawn;
 
-    void Start() {
+    public void start() {
         board = Board.board;
         updateBoardDisplay();
     }
