@@ -19,6 +19,47 @@ public class King : Piece {
             setReaching(file - 1, rank - 1);
             setReaching(file - 1, rank);
             setReaching(file - 1, rank + 1);
+
+            // Castling
+            if (timesMoved == 0) {
+                if (colour == Colour.WHITE && !space.isBeingAttackedByBlack) {
+                    // White long
+                    if (!board[0, 0].isEmpty && board[0, 0].piece is Rook && board[0, 0].piece.timesMoved == 0 &&
+                        board[1, 0].isEmpty && board[2, 0].isEmpty && board[3, 0].isEmpty &&
+                        !board[2, 0].isBeingAttackedByBlack && !board[3, 0].isBeingAttackedByBlack) {
+
+                        playableMoves.Add(new CastlingMove(CastlingType.WHITE_LONG, this, board[2, 0]));
+                    }
+
+                    // White short
+                    if (!board[7, 0].isEmpty && board[7, 0].piece is Rook && board[7, 0].piece.timesMoved == 0 &&
+                        board[5, 0].isEmpty && board[6, 0].isEmpty &&
+                        !board[5, 0].isBeingAttackedByBlack && !board[6, 0].isBeingAttackedByBlack) {
+
+                        playableMoves.Add(new CastlingMove(CastlingType.WHITE_SHORT, this, board[6, 0]));
+                    }
+
+                }
+                else if (colour == Colour.BLACK && !space.isBeingAttackedByWhite) {
+                    // Black long
+                    if (!board[0, 7].isEmpty && board[0, 7].piece is Rook && board[0, 7].piece.timesMoved == 0 &&
+                        board[1, 7].isEmpty && board[2, 7].isEmpty && board[3, 7].isEmpty &&
+                        !board[2, 7].isBeingAttackedByWhite && !board[3, 7].isBeingAttackedByWhite) {
+
+                        playableMoves.Add(new CastlingMove(CastlingType.BLACK_LONG, this, board[2, 7]));
+                    }
+
+                    // Black short
+                    if (!board[7, 7].isEmpty && board[7, 7].piece is Rook && board[7, 7].piece.timesMoved == 0 &&
+                        board[5, 7].isEmpty && board[6, 7].isEmpty &&
+                        !board[5, 7].isBeingAttackedByWhite && !board[6, 7].isBeingAttackedByWhite) {
+
+                        playableMoves.Add(new CastlingMove(CastlingType.BLACK_SHORT, this, board[6, 7]));
+                    }
+
+                }
+
+            }
         }
     }
 

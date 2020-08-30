@@ -11,7 +11,7 @@ public class Board : MonoBehaviour {
     public static bool gameIsOver;
     public static bool gameIsStalemate;
     public static bool whiteIsAI = false;
-    public static bool blackIsAI = false;
+    public static bool blackIsAI = true;
     public static Computer whiteComputer;
     public static Computer blackComputer;
 
@@ -21,7 +21,7 @@ public class Board : MonoBehaviour {
             whiteComputer = new Computer(Colour.WHITE, 3);
         }
         if (blackIsAI) {
-            blackComputer = new Computer(Colour.BLACK, 2);
+            blackComputer = new Computer(Colour.BLACK, 3);
         }
 
         // Create the board.
