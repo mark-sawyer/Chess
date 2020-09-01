@@ -75,8 +75,8 @@ public class King : Piece {
     private void setReaching(int goalFile, int goalRank) {
         if (inBoardRange(goalFile) && inBoardRange(goalRank)) {
             Space spaceObserved = board[goalFile, goalRank];
+            spaceObserved.setBeingAttacked(colour);
             if (spaceObserved.isEmpty || spaceObserved.piece.colour != colour) {
-                spaceObserved.setBeingAttacked(colour);
                 playableMoves.Add(new Move(this, spaceObserved));
             }
         }

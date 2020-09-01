@@ -10,7 +10,7 @@ public class Board : MonoBehaviour {
     public static int turnNum;
     public static bool gameIsOver;
     public static bool gameIsStalemate;
-    public static bool whiteIsAI = false;
+    public static bool whiteIsAI = true;
     public static bool blackIsAI = true;
     public static Computer whiteComputer;
     public static Computer blackComputer;
@@ -55,7 +55,7 @@ public class Board : MonoBehaviour {
         if (turn == Colour.WHITE) {
             turn = Colour.BLACK;
             if (blackTeam.king.space.isBeingAttackedByWhite) {
-                GameObject.Find("chess manager").GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("click"));
+                //GameObject.Find("chess manager").GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("click"));
                 gameIsOver = blackTeam.isCheckmated();
             }
             else {
@@ -69,7 +69,7 @@ public class Board : MonoBehaviour {
         else {
             turn = Colour.WHITE;
             if (whiteTeam.king.space.isBeingAttackedByBlack) {
-                GameObject.Find("chess manager").GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("click"));
+                //GameObject.Find("chess manager").GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("click"));
                 gameIsOver = whiteTeam.isCheckmated();
             }
             else {
@@ -89,11 +89,12 @@ public class Board : MonoBehaviour {
                 Debug.Log("White wins");
             }
 
-            GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().enabled = false;
+            resetBoard();
         }
         else if (gameIsStalemate) {
             Debug.Log("Stalemate");
-            GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().enabled = false;
+
+            resetBoard();
         }
     }
 
@@ -119,6 +120,21 @@ public class Board : MonoBehaviour {
             else {
                 gameIsStalemate = whiteTeam.isStalemated();
             }
+        }
+    }
+
+    public static void resetBoard() {
+        gameIsOver = false;
+        gameIsStalemate = false;
+        turnNum = 1;
+        whiteTeam.resetTeam();
+        blackTeam.resetTeam();
+        turn = Colour.WHITE;
+        GameEvents.clearBeingAttacked.Invoke();
+        GameEvents.getPlayableMoves.Invoke();
+        GameEvents.filterPlayableMoves.Invoke();
+        if (whiteIsAI) {
+            ComputerTimer.willPlay = true;
         }
     }
 }

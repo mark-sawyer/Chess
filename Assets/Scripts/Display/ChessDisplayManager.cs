@@ -6,17 +6,13 @@ public class ChessDisplayManager : MonoBehaviour {
     public LayerMask pieceLayer;
     public Space[,] board;
 
-    public GameObject movable;
-    public GameObject whitePawn;
-    public GameObject blackPawn;
-
     public void start() {
         board = Board.board;
         updateBoardDisplay();
     }
 
     void Update() {
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0) && ((Board.turn == Colour.WHITE && !Board.whiteIsAI) || (Board.turn == Colour.BLACK && !Board.blackIsAI))) {
             RaycastHit2D ray = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 0, pieceLayer);
             if (ray.collider != null && ray.collider.GetComponent<GameObjectPiece>().piece.colour == Board.turn) {
                 ray.collider.GetComponent<GameObjectPiece>().startBeingHeld();

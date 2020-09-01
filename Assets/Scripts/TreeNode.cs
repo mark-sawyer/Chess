@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TreeNode {
     public int level;
-    public int value;
+    public float value;
     public Move move;
     public List<TreeNode> branchingNodes;
     public int alpha;
@@ -46,7 +46,6 @@ public class TreeNode {
     }
 
     public void evaluateBoardValue() {
-        int boardValue;
         if (Board.gameIsOver) {
             value = 9999;
             if (Board.turn == Colour.WHITE) {
@@ -61,12 +60,32 @@ public class TreeNode {
             alphaBetaPruning();
         }
         else {
-            boardValue = 0;
+            float boardValue = 0;
             foreach (Piece piece in Board.whiteTeam.alivePieces) {
-                boardValue += piece.value;
+                if (piece is Pawn) {
+                    if (((Pawn)piece).isPromoted) {
+                        boardValue += ((Pawn)piece).promotionQueen.value;
+                    }
+                    else {
+                        boardValue += piece.value + (0.01f * piece.timesMoved);
+                    }
+                }
+                else {
+                    boardValue += piece.value;
+                }
             }
             foreach (Piece piece in Board.blackTeam.alivePieces) {
-                boardValue += piece.value;
+                if (piece is Pawn) {
+                    if (((Pawn)piece).isPromoted) {
+                        boardValue += ((Pawn)piece).promotionQueen.value;
+                    }
+                    else {
+                        boardValue += piece.value + (0.01f * piece.timesMoved);
+                    }
+                }
+                else {
+                    boardValue += piece.value;
+                }
             }
 
             value = boardValue;

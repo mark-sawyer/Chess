@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class Pin {
     public Direction pinType;
-    public int turnPinned;
 
-    public Pin(Direction pinType, int turnPinned) {
+    public Pin(Direction pinType) {
         this.pinType = pinType;
-        this.turnPinned = turnPinned;
     }
 }

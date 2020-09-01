@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Rook : OrthoDiagPiece {
-    public bool hasMoved;
+    public bool hasMoved;  // delete
 
     public Rook(Colour colour) : base(colour) {
         value = 5;

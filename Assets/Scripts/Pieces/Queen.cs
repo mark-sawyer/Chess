@@ -25,7 +25,8 @@ public class Queen : OrthoDiagPiece {
         }
     }
 
-    public void removeListener() {
+    public void removeListeners() {
         GameEvents.getPlayableMoves.RemoveListener(getPlayableMoves);
+        GameEvents.filterPlayableMoves.RemoveListener(filterPlayableMoves);
     }
 }

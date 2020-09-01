@@ -21,7 +21,7 @@ public class Pawn : Piece {
         }
 
         promotionQueen = new Queen(colour);
-        promotionQueen.removeListener();
+        promotionQueen.removeListeners();
         promotionQueen.isHost = false;
         promotionQueen.host = this;
         turnMovedTwo = -999;
@@ -132,58 +132,55 @@ public class Pawn : Piece {
     public override void filterPlayableMoves() {
         if (pin != null) {
             if (!isPromoted) {
-                if (pin.turnPinned == Board.turnNum) {
-                    List<Move> movesToRemove = new List<Move>();
-                    switch (pin.pinType) {
-                        case Direction.HORIZONTAL:
-                            playableMoves.Clear();
-                            break;
+                List<Move> movesToRemove = new List<Move>();
+                switch (pin.pinType) {
+                    case Direction.HORIZONTAL:
+                        playableMoves.Clear();
+                        break;
 
-                        case Direction.VERTICAL:
-                            foreach (Move move in playableMoves) {
-                                if (move is DiagonalPawnMove) {
-                                    movesToRemove.Add(move);
-                                }
+                    case Direction.VERTICAL:
+                        foreach (Move move in playableMoves) {
+                            if (move is DiagonalPawnMove) {
+                                movesToRemove.Add(move);
                             }
+                        }
 
-                            foreach (Move move in movesToRemove) {
-                                playableMoves.Remove(move);
+                        foreach (Move move in movesToRemove) {
+                            playableMoves.Remove(move);
+                        }
+
+                        break;
+
+                    case Direction.POSITIVE:
+                        foreach (Move move in playableMoves) {
+                            if (!(move is DiagonalPawnMove) || ((DiagonalPawnMove)move).direction != pin.pinType) {
+                                movesToRemove.Add(move);
                             }
+                        }
 
-                            break;
+                        foreach (Move move in movesToRemove) {
+                            playableMoves.Remove(move);
+                        }
+                        break;
 
-                        case Direction.POSITIVE:
-                            foreach (Move move in playableMoves) {
-                                if (!(move is DiagonalPawnMove) || ((DiagonalPawnMove)move).direction != pin.pinType) {
-                                    movesToRemove.Add(move);
-                                }
+                    case Direction.NEGATIVE:
+                        foreach (Move move in playableMoves) {
+                            if (!(move is DiagonalPawnMove) || ((DiagonalPawnMove)move).direction != pin.pinType) {
+                                movesToRemove.Add(move);
                             }
+                        }
 
-                            foreach (Move move in movesToRemove) {
-                                playableMoves.Remove(move);
-                            }
-                            break;
-
-                        case Direction.NEGATIVE:
-                            foreach (Move move in playableMoves) {
-                                if (!(move is DiagonalPawnMove) || ((DiagonalPawnMove)move).direction != pin.pinType) {
-                                    movesToRemove.Add(move);
-                                }
-                            }
-
-                            foreach (Move move in movesToRemove) {
-                                playableMoves.Remove(move);
-                            }
-                            break;
-                    }
-                }
-                else {
-                    pin = null;
-                }
+                        foreach (Move move in movesToRemove) {
+                            playableMoves.Remove(move);
+                        }
+                        break;
+                }                
             }
             else {
                 promotionQueen.filterPlayableMoves();
             }
+
+            pin = null;
         }
     }
 }

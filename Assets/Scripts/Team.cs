@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Team {
     public Space[,] board;
+    public List<Piece> allPieces;
     public List<Piece> alivePieces;
     public Piece king;
     public Colour colour;
@@ -12,6 +13,7 @@ public class Team {
         this.colour = colour;
         board = Board.board;
         alivePieces = new List<Piece>();
+        allPieces = new List<Piece>();
 
         int pawnRank;
         int otherPieceRank;
@@ -51,11 +53,16 @@ public class Team {
         for (int file = 0; file < 8; file++) {
             alivePieces.Add(board[file, pawnRank].piece);
             alivePieces.Add(board[file, otherPieceRank].piece);
+            allPieces.Add(board[file, pawnRank].piece);
+            allPieces.Add(board[file, otherPieceRank].piece);
+
+            board[file, pawnRank].piece.initialSpace = board[file, pawnRank].piece.space;
+            board[file, otherPieceRank].piece.initialSpace = board[file, otherPieceRank].piece.space;
         }
     }
 
     public bool isCheckmated() {
-        List<List<Move>> movesToRemoveList = new List<List<Move>>();
+        List<List<Move>> movesToRemoveLists = new List<List<Move>>();
         List<Move> movesToRemove;
         int totalPlayableMoves = 0;
 
@@ -92,14 +99,14 @@ public class Team {
             }
 
             // Add the moves to filter out to the list of lists.
-            movesToRemoveList.Add(movesToRemove);
+            movesToRemoveLists.Add(movesToRemove);
         }
 
         // Match each move to remove to the new ones in playableMoves for each piece.
         // Place the matches in a new list, loop through it removing those items from playableMoves.
-        for (int i = 0; i < movesToRemoveList.Count; i++) {
+        for (int i = 0; i < movesToRemoveLists.Count; i++) {
             movesToRemove = new List<Move>();
-            foreach (Move move in movesToRemoveList[i]) {
+            foreach (Move move in movesToRemoveLists[i]) {
                 foreach (Move playableMove in alivePieces[i].playableMoves) {
                     if (move.isEqual(playableMove)) {
                         movesToRemove.Add(playableMove);
@@ -125,5 +132,29 @@ public class Team {
             }
         }
         return true;
+    }
+
+    public void resetTeam() {
+        alivePieces.Clear();
+
+        foreach(Piece piece in allPieces) {
+            alivePieces.Add(piece);
+
+            piece.timesMoved = 0;
+            if (piece.space != null) {
+                piece.space.removePiece();
+            }
+            
+            if (!piece.initialSpace.isEmpty) {
+                piece.initialSpace.removePiece();
+            }
+            piece.initialSpace.setPiece(piece);
+            piece.playableMoves.Clear();
+
+            if (piece is Pawn) {
+                ((Pawn)piece).isPromoted = false;
+                ((Pawn)piece).promotionQueen.space = piece.initialSpace;
+            }
+        }
     }
 }

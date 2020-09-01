@@ -13,6 +13,10 @@ public class Computer {
     }
 
     public void move() {
+        if (Board.turnNum == 113) {
+            Debug.Log("");
+        }
+
         TreeNode zero = new TreeNode(0);
         miniMax(zero, -999999, 999999);
 

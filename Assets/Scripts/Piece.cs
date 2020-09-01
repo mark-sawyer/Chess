@@ -5,11 +5,12 @@ using UnityEngine;
 public abstract class Piece {
     public Space[,] board;
     public Space space;
+    public Space initialSpace;
     public Team team;
     public List<Move> playableMoves;
     public Pin pin;
     public Colour colour;
-    public int value;
+    public float value;
     public int timesMoved;
     public bool isHost;
 
@@ -52,4 +53,9 @@ public abstract class Piece {
     }
 
     public abstract void filterPlayableMoves();
+
+    public void resetPiece() {
+        space.removePiece();
+        space = initialSpace;
+    }
 }

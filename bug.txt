@@ -1,0 +1,13 @@
+NullReferenceException: Object reference not set to an instance of an object
+Board.softChangeTurn () (at Assets/Scripts/Board.cs:107)
+Computer.miniMax (TreeNode node, System.Int32 alpha, System.Int32 beta) (at Assets/Scripts/Computer.cs:44)
+Computer.miniMax (TreeNode node, System.Int32 alpha, System.Int32 beta) (at Assets/Scripts/Computer.cs:46)
+Computer.miniMax (TreeNode node, System.Int32 alpha, System.Int32 beta) (at Assets/Scripts/Computer.cs:46)
+Computer.move () (at Assets/Scripts/Computer.cs:17)
+ComputerTimer.Update () (at Assets/Scripts/ComputerTimer.cs:21)
+
+at
+blackTeam.king.space.isBeingAttackedByWhite
+
+king didn't have a space
+king must have been taken?

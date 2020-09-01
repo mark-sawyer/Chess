@@ -18,6 +18,10 @@ public class Move {
     }
 
     public virtual void executeMove() {
+        if (takenPiece is King) {
+            Debug.Log(movingPiece);
+        }
+
         if (!movingPiece.isHost) {
             movingPiece = ((Queen)movingPiece).host;
         }

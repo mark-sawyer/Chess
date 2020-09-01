@@ -56,12 +56,8 @@ public class Knight : Piece {
 
     public override void filterPlayableMoves() {
         if (pin != null) {
-            if (pin.turnPinned == Board.turnNum) {
-                playableMoves.Clear();
-            }
-            else {
-                pin = null;
-            }
+            playableMoves.Clear();            
+            pin = null;            
         }
     }
 }

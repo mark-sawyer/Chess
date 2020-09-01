@@ -88,7 +88,12 @@ public abstract class OrthoDiagPiece : Piece {
             else {
                 if (!spaceObserved.isEmpty) {
                     if (spaceObserved.piece is King && spaceObserved.piece.colour != colour) {
-                        possiblyPinnedPiece.pin = new Pin(moveDirection, Board.turnNum);
+                        if (!(possiblyPinnedPiece is Pawn) || !((Pawn)possiblyPinnedPiece).isPromoted) {
+                            possiblyPinnedPiece.pin = new Pin(moveDirection);
+                        }
+                        else {
+                            ((Pawn)possiblyPinnedPiece).promotionQueen.pin = new Pin(moveDirection);
+                        }
                     }
                     break;
                 }
@@ -135,7 +140,12 @@ public abstract class OrthoDiagPiece : Piece {
             else {
                 if (!spaceObserved.isEmpty) {
                     if (spaceObserved.piece is King && spaceObserved.piece.colour != colour) {
-                        possiblyPinnedPiece.pin = new Pin(moveDirection, Board.turnNum);
+                        if (!(possiblyPinnedPiece is Pawn) || !((Pawn)possiblyPinnedPiece).isPromoted) {
+                            possiblyPinnedPiece.pin = new Pin(moveDirection);
+                        }
+                        else {
+                            ((Pawn)possiblyPinnedPiece).promotionQueen.pin = new Pin(moveDirection);
+                        }
                     }
                     break;
                 }
@@ -148,20 +158,17 @@ public abstract class OrthoDiagPiece : Piece {
 
     public override void filterPlayableMoves() {
         if (pin != null) {
-            if (pin.turnPinned == Board.turnNum) {
-                List<Move> movesToRemove = new List<Move>();
-                foreach (OrthoDiagMove move in playableMoves) {
-                    if (move.direction != pin.pinType) {
-                        movesToRemove.Add(move);
-                    }
-                }
-
-                foreach (Move move in movesToRemove) {
-                    playableMoves.Remove(move);
+            List<Move> movesToRemove = new List<Move>();
+            foreach (OrthoDiagMove move in playableMoves) {  // Change to OrthoDiagMove later
+                if (move.direction != pin.pinType) {
+                    movesToRemove.Add(move);
                 }
             }
-        }
-        else {
+
+            foreach (Move move in movesToRemove) {
+                playableMoves.Remove(move);
+            }
+
             pin = null;
         }
     }
