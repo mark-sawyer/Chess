@@ -23,7 +23,8 @@ public class GameObjectPiece : MonoBehaviour {
                     int newFile = ray.collider.GetComponent<ReachableSpace>().file;
                     int newRank = ray.collider.GetComponent<ReachableSpace>().rank;
                     Undo.lastMove = piece.getMoveMatchingToSpace(board[newFile, newRank]);
-                    piece.getMoveMatchingToSpace(board[newFile, newRank]).executeMove();
+                    bool pawnMoveOrPieceTaken = piece.getMoveMatchingToSpace(board[newFile, newRank]).executeRealMove();
+                    Board.updateFiftyMoveRule(pawnMoveOrPieceTaken);
                     GameEvents.changeTurn.Invoke();
                     GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().updateBoardDisplay();
                 }

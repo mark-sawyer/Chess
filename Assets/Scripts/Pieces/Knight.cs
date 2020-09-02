@@ -18,19 +18,17 @@ public class Knight : Piece {
             int file = space.file;
             int rank = space.rank;
 
-            if (pin == null) {
-                checkToAddSpaceObserved(file + 2, rank + 1);
-                checkToAddSpaceObserved(file + 1, rank + 2);
+            checkToAddSpaceObserved(file + 2, rank + 1);
+            checkToAddSpaceObserved(file + 1, rank + 2);
 
-                checkToAddSpaceObserved(file - 2, rank + 1);
-                checkToAddSpaceObserved(file - 1, rank + 2);
+            checkToAddSpaceObserved(file - 2, rank + 1);
+            checkToAddSpaceObserved(file - 1, rank + 2);
 
-                checkToAddSpaceObserved(file + 2, rank - 1);
-                checkToAddSpaceObserved(file + 1, rank - 2);
+            checkToAddSpaceObserved(file + 2, rank - 1);
+            checkToAddSpaceObserved(file + 1, rank - 2);
 
-                checkToAddSpaceObserved(file - 2, rank - 1);
-                checkToAddSpaceObserved(file - 1, rank - 2);
-            }
+            checkToAddSpaceObserved(file - 2, rank - 1);
+            checkToAddSpaceObserved(file - 1, rank - 2);
         }
     }
 
@@ -55,7 +53,7 @@ public class Knight : Piece {
     }
 
     public override void filterPlayableMoves() {
-        if (pin != null) {
+        if (space != null && pin != null) {
             playableMoves.Clear();            
             pin = null;            
         }

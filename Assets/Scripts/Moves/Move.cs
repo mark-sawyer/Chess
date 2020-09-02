@@ -38,6 +38,15 @@ public class Move {
         Board.turnNum++;
     }
 
+    public virtual bool executeRealMove() {
+        executeMove();
+        GameEvents.removeLastMove.Invoke();
+        GameObject.Instantiate(Resources.Load<GameObject>("last move"), new Vector3(newSpace.file, newSpace.rank, 0), Quaternion.identity);
+        GameObject.Instantiate(Resources.Load<GameObject>("last move"), new Vector3(oldSpace.file, oldSpace.rank, 0), Quaternion.identity);
+
+        return takenPiece != null;
+    }
+
     public virtual void undoMove() {
         if (!movingPiece.isHost) {
             movingPiece = ((Queen)movingPiece).host;

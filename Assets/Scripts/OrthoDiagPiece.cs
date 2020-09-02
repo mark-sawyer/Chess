@@ -157,7 +157,7 @@ public abstract class OrthoDiagPiece : Piece {
     }
 
     public override void filterPlayableMoves() {
-        if (pin != null) {
+        if (space != null && pin != null) {
             List<Move> movesToRemove = new List<Move>();
             foreach (OrthoDiagMove move in playableMoves) {  // Change to OrthoDiagMove later
                 if (move.direction != pin.pinType) {

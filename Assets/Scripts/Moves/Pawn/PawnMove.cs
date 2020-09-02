@@ -22,6 +22,15 @@ public class PawnMove : Move {
         base.executeMove();
     }
 
+    public override bool executeRealMove() {
+        executeMove();
+        GameEvents.removeLastMove.Invoke();
+        GameObject.Instantiate(Resources.Load<GameObject>("last move"), new Vector3(newSpace.file, newSpace.rank, 0), Quaternion.identity);
+        GameObject.Instantiate(Resources.Load<GameObject>("last move"), new Vector3(oldSpace.file, oldSpace.rank, 0), Quaternion.identity);
+
+        return true;
+    }
+
     public override void undoMove() {
         if (Mathf.Abs(newSpace.rank - oldSpace.rank) == 2) {
             ((Pawn)movingPiece).turnMovedTwo = -999;

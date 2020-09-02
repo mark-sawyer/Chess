@@ -14,6 +14,7 @@ public class Board : MonoBehaviour {
     public static bool blackIsAI = true;
     public static Computer whiteComputer;
     public static Computer blackComputer;
+    public static int fiftyMoveRule;
 
     private void Awake() {
         GameEvents.changeTurn.AddListener(changeTurn);
@@ -55,7 +56,7 @@ public class Board : MonoBehaviour {
         if (turn == Colour.WHITE) {
             turn = Colour.BLACK;
             if (blackTeam.king.space.isBeingAttackedByWhite) {
-                //GameObject.Find("chess manager").GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("click"));
+                GameObject.Find("chess manager").GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("click"));
                 gameIsOver = blackTeam.isCheckmated();
             }
             else {
@@ -69,7 +70,7 @@ public class Board : MonoBehaviour {
         else {
             turn = Colour.WHITE;
             if (whiteTeam.king.space.isBeingAttackedByBlack) {
-                //GameObject.Find("chess manager").GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("click"));
+                GameObject.Find("chess manager").GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("click"));
                 gameIsOver = whiteTeam.isCheckmated();
             }
             else {
@@ -93,6 +94,11 @@ public class Board : MonoBehaviour {
         }
         else if (gameIsStalemate) {
             Debug.Log("Stalemate");
+
+            resetBoard();
+        }
+        else if (fiftyMoveRule == 50) {
+            Debug.Log("Draw by the fifty move rule");
 
             resetBoard();
         }
@@ -124,6 +130,7 @@ public class Board : MonoBehaviour {
     }
 
     public static void resetBoard() {
+        fiftyMoveRule = 0;
         gameIsOver = false;
         gameIsStalemate = false;
         turnNum = 1;
@@ -135,6 +142,31 @@ public class Board : MonoBehaviour {
         GameEvents.filterPlayableMoves.Invoke();
         if (whiteIsAI) {
             ComputerTimer.willPlay = true;
+        }
+    }
+
+    public static void updateFiftyMoveRule(bool update) {
+        if (turn == Colour.WHITE) {
+            whiteTeam.pawnMoveOrPieceTakenOnTurn = update;
+        }
+        else {
+            blackTeam.pawnMoveOrPieceTakenOnTurn = update;
+
+            if (!whiteTeam.pawnMoveOrPieceTakenOnTurn && !blackTeam.pawnMoveOrPieceTakenOnTurn) {
+                fiftyMoveRule++;
+            }
+            else {
+                fiftyMoveRule = 0;
+            }
+        }
+    }
+
+    public static Team getOpposingTeamFromColour(Colour teamColour) {
+        if (teamColour == Colour.WHITE) {
+            return blackTeam;
+        }
+        else {
+            return whiteTeam;
         }
     }
 }

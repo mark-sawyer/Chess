@@ -10,4 +10,5 @@ public class GameEvents {
     public static UnityEvent changeTurn = new UnityEvent();
     public static UnityEvent clearBeingAttacked = new UnityEvent();
     public static UnityEvent setTeam = new UnityEvent();
+    public static UnityEvent removeLastMove = new UnityEvent();
 }

@@ -130,8 +130,8 @@ public class Pawn : Piece {
     }
 
     public override void filterPlayableMoves() {
-        if (pin != null) {
-            if (!isPromoted) {
+        if (space != null) {
+            if (!isPromoted && pin != null) {
                 List<Move> movesToRemove = new List<Move>();
                 switch (pin.pinType) {
                     case Direction.HORIZONTAL:
@@ -174,13 +174,13 @@ public class Pawn : Piece {
                             playableMoves.Remove(move);
                         }
                         break;
-                }                
+                }
+
+                pin = null;
             }
-            else {
+            else if (isPromoted && promotionQueen.pin != null) {
                 promotionQueen.filterPlayableMoves();
             }
-
-            pin = null;
         }
     }
 }

@@ -8,6 +8,7 @@ public class Team {
     public List<Piece> alivePieces;
     public Piece king;
     public Colour colour;
+    public bool pawnMoveOrPieceTakenOnTurn;
 
     public Team(Colour colour) {
         this.colour = colour;

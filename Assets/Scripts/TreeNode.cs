@@ -7,8 +7,8 @@ public class TreeNode {
     public float value;
     public Move move;
     public List<TreeNode> branchingNodes;
-    public int alpha;
-    public int beta;
+    public float alpha;
+    public float beta;
 
     public TreeNode(int level) {
         this.level = level;
@@ -62,26 +62,16 @@ public class TreeNode {
         else {
             float boardValue = 0;
             foreach (Piece piece in Board.whiteTeam.alivePieces) {
-                if (piece is Pawn) {
-                    if (((Pawn)piece).isPromoted) {
-                        boardValue += ((Pawn)piece).promotionQueen.value;
-                    }
-                    else {
-                        boardValue += piece.value + (0.01f * piece.timesMoved);
-                    }
+                if (piece is Pawn && ((Pawn)piece).isPromoted) {
+                    boardValue += ((Pawn)piece).promotionQueen.value;
                 }
                 else {
                     boardValue += piece.value;
                 }
             }
             foreach (Piece piece in Board.blackTeam.alivePieces) {
-                if (piece is Pawn) {
-                    if (((Pawn)piece).isPromoted) {
-                        boardValue += ((Pawn)piece).promotionQueen.value;
-                    }
-                    else {
-                        boardValue += piece.value + (0.01f * piece.timesMoved);
-                    }
+                if (piece is Pawn && ((Pawn)piece).isPromoted) {
+                    boardValue += ((Pawn)piece).promotionQueen.value;
                 }
                 else {
                     boardValue += piece.value;
@@ -95,7 +85,7 @@ public class TreeNode {
     }
 
     public void evaluateBranchValues() {
-        int num;
+        float num;
         if (Board.turn == Colour.WHITE) {
             num = -9999;
             foreach (TreeNode branchNode in branchingNodes) {

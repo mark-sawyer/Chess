@@ -13,10 +13,6 @@ public class Computer {
     }
 
     public void move() {
-        if (Board.turnNum == 113) {
-            Debug.Log("");
-        }
-
         TreeNode zero = new TreeNode(0);
         miniMax(zero, -999999, 999999);
 
@@ -27,13 +23,40 @@ public class Computer {
             }
         }
 
+
+        // Prioritise pawn moves if there are few pieces.
+        if (Board.getOpposingTeamFromColour(colour).alivePieces.Count <= 8) {
+            bool pawnMoveIsPossible = false;
+            foreach (Move move in possibleMoves) {
+                if (move is PawnMove) {
+                    pawnMoveIsPossible = true;
+                }
+            }
+
+            if (pawnMoveIsPossible) {
+                Debug.Log("prioritising pawn move");
+                List<Move> nonPawnMoves = new List<Move>();
+                foreach (Move move in possibleMoves) {
+                    if (!(move is PawnMove)) {
+                        nonPawnMoves.Add(move);
+                    }
+                }
+
+                foreach (Move nonPawnMove in nonPawnMoves) {
+                    possibleMoves.Remove(nonPawnMove);
+                }
+            }
+        }
+
         int randomIndex = Random.Range(0, possibleMoves.Count);
-        possibleMoves[randomIndex].executeMove();
+        bool pawnMoveOrPieceTaken = possibleMoves[randomIndex].executeRealMove();
+
+        Board.updateFiftyMoveRule(pawnMoveOrPieceTaken);
         GameEvents.changeTurn.Invoke();
         GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().updateBoardDisplay();
     }
 
-    public void miniMax(TreeNode node, int alpha, int beta) {
+    public void miniMax(TreeNode node, float alpha, float beta) {
         node.alpha = alpha;
         node.beta = beta;
 
