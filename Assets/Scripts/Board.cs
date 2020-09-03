@@ -10,20 +10,16 @@ public class Board : MonoBehaviour {
     public static int turnNum;
     public static bool gameIsOver;
     public static bool gameIsStalemate;
-    public static bool whiteIsAI = true;
-    public static bool blackIsAI = true;
+    public static bool whiteIsAI = false;
+    public static bool blackIsAI = false;
     public static Computer whiteComputer;
     public static Computer blackComputer;
     public static int fiftyMoveRule;
 
     private void Awake() {
         GameEvents.changeTurn.AddListener(changeTurn);
-        if (whiteIsAI) {
-            whiteComputer = new Computer(Colour.WHITE, 3);
-        }
-        if (blackIsAI) {
-            blackComputer = new Computer(Colour.BLACK, 3);
-        }
+        whiteComputer = new Computer(Colour.WHITE, 3);
+        blackComputer = new Computer(Colour.BLACK, 3);
 
         // Create the board.
         for (int file = 0; file < 8; file++) {
@@ -167,6 +163,15 @@ public class Board : MonoBehaviour {
         }
         else {
             return whiteTeam;
+        }
+    }
+
+    public static Computer getComputerFromColour(Colour computerColour) {
+        if (computerColour == Colour.WHITE) {
+            return whiteComputer;
+        }
+        else {
+            return blackComputer;
         }
     }
 }

@@ -8,7 +8,6 @@ public class ChessDisplayManager : MonoBehaviour {
 
     public void start() {
         board = Board.board;
-        updateBoardDisplay();
     }
 
     void Update() {
