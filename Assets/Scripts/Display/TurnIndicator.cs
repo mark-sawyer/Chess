@@ -18,4 +18,8 @@ public class TurnIndicator : MonoBehaviour {
             GetComponent<SpriteRenderer>().sprite = white;
         }
     }
+
+    public void setToWhite() {
+        GetComponent<SpriteRenderer>().sprite = white;
+    }
 }

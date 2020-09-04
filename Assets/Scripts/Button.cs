@@ -2,14 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Button {
-    public abstract void performAction();
+public interface Button {
+    void performAction();
 }
 
 public class StartButton : Button {
-    public override void performAction() {
-        Board.resetBoard();
-        GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().updateBoardDisplay();
+    GameObject visual;
+
+    public StartButton(GameObject visual) {
+        this.visual = visual;
+    }
+
+    public void performAction() {
+        GameEvents.resetForNewGame.Invoke();
+        Board.startGame();
+
+        GameObject endGameButton = Object.Instantiate(Resources.Load<GameObject>("Button/end game button"), visual.transform.position, Quaternion.identity);
+        endGameButton.GetComponent<Compressable>().button = new EndGameButton(endGameButton);
+        GameEvents.changeCompressability.Invoke(false);
+        Object.Destroy(visual);
+    }
+}
+
+public class EndGameButton : Button {
+    GameObject visual;
+
+    public EndGameButton(GameObject visual) {
+        this.visual = visual;
+    }
+
+    public void performAction() {
+        Board.endGame();
+
+        GameObject startButton = Object.Instantiate(Resources.Load<GameObject>("Button/start button"), visual.transform.position, Quaternion.identity);
+        startButton.GetComponent<Compressable>().button = new StartButton(startButton);
+        GameEvents.changeCompressability.Invoke(true);
+        Object.Destroy(visual);
     }
 }
 
@@ -20,9 +48,15 @@ public class HumanButton : Button {
     public HumanButton(Colour colour, GameObject visual) {
         this.colour = colour;
         this.visual = visual;
+
+        GameEvents.changeCompressability.AddListener(turnOff);
     }
 
-    public override void performAction() {
+    public void performAction() {
+        if (Board.getComputerFromColour(colour).maxLevel == 4) {
+            GameObject.Find("chess manager").GetComponent<ButtonPressManager>().getWarningFromColour(colour).GetComponent<SpriteRenderer>().enabled = true;
+        }
+
         if (colour == Colour.WHITE) {
             Board.whiteIsAI = true;
         }
@@ -40,6 +74,12 @@ public class HumanButton : Button {
         }
         Object.Destroy(visual);
     }
+
+    private void turnOff(bool b) {
+        if (visual != null) {
+            visual.GetComponent<Compressable>().enabled = b;
+        }
+    }
 }
 
 public class AIButton : Button {
@@ -49,9 +89,13 @@ public class AIButton : Button {
     public AIButton(Colour colour, GameObject visual) {
         this.colour = colour;
         this.visual = visual;
+
+        GameEvents.changeCompressability.AddListener(turnOff);
     }
 
-    public override void performAction() {
+    public void performAction() {
+        GameObject.Find("chess manager").GetComponent<ButtonPressManager>().getWarningFromColour(colour).GetComponent<SpriteRenderer>().enabled = false;
+
         if (colour == Colour.WHITE) {
             Board.whiteIsAI = false;
         }
@@ -63,6 +107,12 @@ public class AIButton : Button {
         GameObject humanButton = Object.Instantiate(Resources.Load<GameObject>("Button/human button"), aiLayout.transform.position, Quaternion.identity);
         humanButton.GetComponent<Compressable>().button = new HumanButton(colour, humanButton);
         Object.Destroy(aiLayout);
+    }
+
+    private void turnOff(bool b) {
+        if (visual != null) {
+            visual.GetComponent<Compressable>().enabled = b;
+        }
     }
 }
 
@@ -79,21 +129,43 @@ public class DifficultyButton : Button {
         computer = Board.getComputerFromColour(colour);
         if (computer.maxLevel == difficulty) {
             visual.GetComponent<SpriteRenderer>().sprite = visual.GetComponent<Compressable>().compressedSprite;
+            visual.GetComponent<Compressable>().enabled = false;
         }
+
+        GameEvents.changeCompressability.AddListener(turnOff);
     }
 
-    public override void performAction() {
-            GameObject otherDifficulty;
-            for (int i = 0; i < 4; i++) {
-                if (i != difficulty - 1) {
-                    otherDifficulty = visual.transform.parent.GetChild(i).gameObject;
-                    otherDifficulty.GetComponent<SpriteRenderer>().sprite = otherDifficulty.GetComponent<Compressable>().regularSprite;
-                    otherDifficulty.GetComponent<Compressable>().enabled = true;
-                }
+    public void performAction() {
+        GameObject otherDifficulty;
+        for (int i = 0; i < 4; i++) {
+            if (i != difficulty - 1) {
+                otherDifficulty = visual.transform.parent.GetChild(i).gameObject;
+                otherDifficulty.GetComponent<SpriteRenderer>().sprite = otherDifficulty.GetComponent<Compressable>().regularSprite;
+                otherDifficulty.GetComponent<Compressable>().enabled = true;
             }
-
-            computer.maxLevel = difficulty;
-            visual.GetComponent<Compressable>().enabled = false;
-            visual.GetComponent<SpriteRenderer>().sprite = visual.GetComponent<Compressable>().compressedSprite;
         }
+
+        if (difficulty == 4) {
+            GameObject.Find("chess manager").GetComponent<ButtonPressManager>().getWarningFromColour(colour).GetComponent<SpriteRenderer>().enabled = true;
+        }
+        else {
+            GameObject.Find("chess manager").GetComponent<ButtonPressManager>().getWarningFromColour(colour).GetComponent<SpriteRenderer>().enabled = false;
+        }
+                        
+        computer.maxLevel = difficulty;
+        visual.GetComponent<Compressable>().enabled = false;
+        visual.GetComponent<SpriteRenderer>().sprite = visual.GetComponent<Compressable>().compressedSprite;
+    }
+
+    private void turnOff(bool b) {
+        if (visual != null) {
+            visual.GetComponent<Compressable>().enabled = b;
+        }
+    }
+}
+
+public class QuitButton : Button {
+    public void performAction() {
+        Application.Quit();
+    }
 }

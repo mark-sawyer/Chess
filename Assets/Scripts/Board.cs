@@ -48,7 +48,6 @@ public class Board : MonoBehaviour {
         GameEvents.getPlayableMoves.Invoke();
         GameEvents.filterPlayableMoves.Invoke();
 
-        // Change turn and check if the king is in check.
         if (turn == Colour.WHITE) {
             turn = Colour.BLACK;
             if (blackTeam.king.space.isBeingAttackedByWhite) {
@@ -57,10 +56,6 @@ public class Board : MonoBehaviour {
             }
             else {
                 gameIsStalemate = blackTeam.isStalemated();
-            }
-
-            if (blackIsAI && !gameIsOver && !gameIsStalemate) {
-                ComputerTimer.willPlay = true;
             }
         }
         else {
@@ -72,31 +67,14 @@ public class Board : MonoBehaviour {
             else {
                 gameIsStalemate = whiteTeam.isStalemated();
             }
-
-            if (whiteIsAI && !gameIsOver && !gameIsStalemate) {
-                ComputerTimer.willPlay = true;
-            }
         }
 
-        if (gameIsOver) {
-            if (turn == Colour.WHITE) {
-                Debug.Log("Black wins");
-            }
-            else {
-                Debug.Log("White wins");
-            }
-
-            resetBoard();
+        if (gameIsOver || gameIsStalemate || fiftyMoveRule == 50) {
+            GameObject.Find("end of game message").GetComponent<EndOfGameMessage>().turnOnMessage();
+            GameObject.Find("turn indicator").GetComponent<SpriteRenderer>().enabled = false;
         }
-        else if (gameIsStalemate) {
-            Debug.Log("Stalemate");
-
-            resetBoard();
-        }
-        else if (fiftyMoveRule == 50) {
-            Debug.Log("Draw by the fifty move rule");
-
-            resetBoard();
+        else if ((turn == Colour.WHITE && whiteIsAI) || (turn == Colour.BLACK && blackIsAI))  {
+            ComputerTimer.willPlay = true;
         }
     }
 
@@ -125,7 +103,8 @@ public class Board : MonoBehaviour {
         }
     }
 
-    public static void resetBoard() {
+    public static void startGame() {
+        GameObject.Find("turn indicator").GetComponent<SpriteRenderer>().enabled = true;
         fiftyMoveRule = 0;
         gameIsOver = false;
         gameIsStalemate = false;
@@ -133,12 +112,24 @@ public class Board : MonoBehaviour {
         whiteTeam.resetTeam();
         blackTeam.resetTeam();
         turn = Colour.WHITE;
+
+        GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().enabled = true;
+        GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().updateBoardDisplay();
+        GameObject.Find("turn indicator").GetComponent<TurnIndicator>().setToWhite();
+
         GameEvents.clearBeingAttacked.Invoke();
         GameEvents.getPlayableMoves.Invoke();
         GameEvents.filterPlayableMoves.Invoke();
         if (whiteIsAI) {
             ComputerTimer.willPlay = true;
         }
+    }
+
+    public static void endGame() {
+        ComputerTimer.abort();
+        GameObject.Find("end of game message").GetComponent<SpriteRenderer>().enabled = false;
+        GameObject.Find("turn indicator").GetComponent<SpriteRenderer>().enabled = false;
+        GameObject.Find("chess manager").GetComponent<ChessDisplayManager>().enabled = false;
     }
 
     public static void updateFiftyMoveRule(bool update) {

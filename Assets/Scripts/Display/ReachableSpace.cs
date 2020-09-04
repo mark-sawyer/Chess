@@ -8,6 +8,7 @@ public class ReachableSpace : MonoBehaviour {
 
     void Start() {
         GameEvents.removeReachableGameObjects.AddListener(destroySelf);
+        GameEvents.resetForNewGame.AddListener(destroySelf);
         file = (int)transform.position.x;
         rank = (int)transform.position.y;
     }

@@ -12,6 +12,7 @@ public class GameObjectPiece : MonoBehaviour {
     private void Start() {
         board = Board.board;
         GameEvents.changeTurn.AddListener(removePiece);
+        GameEvents.resetForNewGame.AddListener(removePiece);
     }
 
     private void Update() {

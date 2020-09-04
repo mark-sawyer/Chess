@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6049989759802958791}
   - component: {fileID: 3726000111158882609}
   - component: {fileID: 2435884193032552962}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: difficulty button 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 220362219694068939}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.13333334, y: 0, z: 0}
+  m_LocalPosition: {x: -0.142, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1164412272034820277}
@@ -121,7 +121,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   compressedSprite: {fileID: 21300000, guid: bfb945f88a9b45f438b4200b310e1158, type: 3}
   regularSprite: {fileID: 21300000, guid: afd3d8e92cb732249a6bdf3c001b6434, type: 3}
-  currentSprite: {fileID: 0}
 --- !u!1 &2017255262923496447
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,7 +165,7 @@ GameObject:
   - component: {fileID: 8925738030996503772}
   - component: {fileID: 1891120189752076723}
   - component: {fileID: 7945229272733520134}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: difficulty button 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,7 +180,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3109054491794328528}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.4, y: 0, z: 0}
+  m_LocalPosition: {x: -0.425, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1164412272034820277}
@@ -275,7 +274,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   compressedSprite: {fileID: 21300000, guid: 8442ef9a3f4ee9f4eb8bfd80535b9a23, type: 3}
   regularSprite: {fileID: 21300000, guid: e84ad786e3f53f24c8d9321b1e525b7a, type: 3}
-  currentSprite: {fileID: 0}
 --- !u!1 &6165087350718568839
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,7 +286,7 @@ GameObject:
   - component: {fileID: 393442285751365259}
   - component: {fileID: 5569692657264034723}
   - component: {fileID: 3771801104258235262}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: difficulty button 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +301,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6165087350718568839}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.13333334, y: 0, z: 0}
+  m_LocalPosition: {x: 0.142, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1164412272034820277}
@@ -397,7 +395,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   compressedSprite: {fileID: 21300000, guid: 87d893731f601b943ad6774a408727ac, type: 3}
   regularSprite: {fileID: 21300000, guid: 857ffc6cd4bfa0c4b95722700b343eee, type: 3}
-  currentSprite: {fileID: 0}
 --- !u!1 &8439793948108885898
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,7 +407,7 @@ GameObject:
   - component: {fileID: 2727818003717814406}
   - component: {fileID: 3652312746738514352}
   - component: {fileID: 2169753791941962751}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: difficulty button 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -425,7 +422,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8439793948108885898}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4, y: 0, z: 0}
+  m_LocalPosition: {x: 0.425, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1164412272034820277}
@@ -519,7 +516,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   compressedSprite: {fileID: 21300000, guid: 60a32b2d0d87acc41a2738ce021a5ed5, type: 3}
   regularSprite: {fileID: 21300000, guid: f0f9127e502e11c46882fa8e37c7a7bc, type: 3}
-  currentSprite: {fileID: 0}
 --- !u!1 &8721483934286180714
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,7 +540,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8721483934286180714}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.346, z: 0}
+  m_LocalPosition: {x: 0, y: -0.376, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7148902367837858451}

@@ -8,7 +8,7 @@ public class Compressable : MonoBehaviour {
 
     public Sprite compressedSprite;
     public Sprite regularSprite;
-    public Sprite currentSprite;
+    private Sprite currentSprite;
 
     public Button button;
 

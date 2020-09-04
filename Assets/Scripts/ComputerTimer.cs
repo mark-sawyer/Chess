@@ -29,4 +29,9 @@ public class ComputerTimer : MonoBehaviour {
             }
         }
     }
+
+    public static void abort() {
+        willPlay = false;
+        pauseTimer = PAUSE_TIMER_START;
+    }
 }

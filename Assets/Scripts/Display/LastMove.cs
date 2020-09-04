@@ -5,6 +5,7 @@ using UnityEngine;
 public class LastMove : MonoBehaviour {
     void Start() {
         GameEvents.removeLastMove.AddListener(destroySelf);
+        GameEvents.resetForNewGame.AddListener(destroySelf);
     }
 
     public void destroySelf() {
