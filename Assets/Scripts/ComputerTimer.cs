@@ -8,8 +8,9 @@ public class ComputerTimer : MonoBehaviour {
     public static bool willPlay;
 
     void Start() {
-        PAUSE_TIMER_START = 0.2f;
+        PAUSE_TIMER_START = 1;
         pauseTimer = PAUSE_TIMER_START;
+        Random.InitState(3);
     }
 
     void Update() {

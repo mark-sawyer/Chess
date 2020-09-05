@@ -15,9 +15,10 @@ public class TreeNode {
         branchingNodes = new List<TreeNode>();
     }
 
-    public TreeNode(int level, Move move) {
+    public TreeNode(int level, Move move, int value) {
         this.level = level;
         this.move = move;
+        this.value = value;
         branchingNodes = new List<TreeNode>();
     }
 
@@ -27,29 +28,43 @@ public class TreeNode {
 
         if (Board.turn == Colour.WHITE) {
             playingTeam = Board.whiteTeam;
+
+            // Find the appropriate capacity
+            foreach (Piece piece in playingTeam.alivePieces) {
+                totalPlayableMoves += piece.playableMoves.Count;
+            }
+            branchingNodes = new List<TreeNode>(totalPlayableMoves);
+
+            foreach (Piece piece in playingTeam.alivePieces) {
+                foreach (Move move in piece.playableMoves) {
+                    branchingNodes.Add(new TreeNode(level + 1, move, Computer.WORST_WHITE_SCORE));                    
+                }
+            }
         }
         else {
             playingTeam = Board.blackTeam;
-        }
 
-        // Find the appropriate capacity
-        foreach (Piece piece in playingTeam.alivePieces) {
-            totalPlayableMoves += piece.playableMoves.Count;
-        }
-        branchingNodes = new List<TreeNode>(totalPlayableMoves);
+            // Find the appropriate capacity
+            foreach (Piece piece in playingTeam.alivePieces) {
+                totalPlayableMoves += piece.playableMoves.Count;
+            }
+            branchingNodes = new List<TreeNode>(totalPlayableMoves);
 
-        foreach (Piece piece in playingTeam.alivePieces) {
-            foreach (Move move in piece.playableMoves) {
-                branchingNodes.Add(new TreeNode(level + 1, move));
+            foreach (Piece piece in playingTeam.alivePieces) {
+                foreach (Move move in piece.playableMoves) {
+                    branchingNodes.Add(new TreeNode(level + 1, move, Computer.WORST_BLACK_SCORE));                    
+                }
             }
         }
     }
 
     public void evaluateBoardValue() {
         if (Board.gameIsOver) {
-            value = 9999;
             if (Board.turn == Colour.WHITE) {
-                value *= -1;
+                value = Computer.WORST_WHITE_SCORE;
+            }
+            else {
+                value = Computer.WORST_BLACK_SCORE;
             }
 
             alphaBetaPruning();
@@ -87,7 +102,7 @@ public class TreeNode {
     public void evaluateBranchValues() {
         float num;
         if (Board.turn == Colour.WHITE) {
-            num = -9999;
+            num = Computer.WORST_WHITE_SCORE;
             foreach (TreeNode branchNode in branchingNodes) {
                 if (branchNode.value > num) {
                     num = branchNode.value;
@@ -95,7 +110,7 @@ public class TreeNode {
             }
         }
         else {
-            num = 9999;
+            num = Computer.WORST_BLACK_SCORE;
             foreach (TreeNode branchNode in branchingNodes) {
                 if (branchNode.value < num) {
                     num = branchNode.value;
@@ -104,17 +119,6 @@ public class TreeNode {
         }
 
         value = num;
-
-        if (Board.turn == Colour.WHITE) {
-            if (num > alpha) {
-                alpha = num;
-            }
-        }
-        else {
-            if (num < beta) {
-                beta = num;
-            }
-        }
     }
 
     public void alphaBetaPruning() {

@@ -7,14 +7,6 @@ public class EndOfGameMessage : MonoBehaviour {
     public Sprite stalemate;
     public Sprite fiftyMove;
 
-    void Start() {
-        
-    }
-
-    void Update() {
-        
-    }
-
     public void turnOnMessage() {
         if (Board.gameIsOver) {
             GetComponent<SpriteRenderer>().sprite = checkmate;

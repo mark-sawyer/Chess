@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Computer {
+    public static int WORST_WHITE_SCORE = -999999;
+    public static int WORST_BLACK_SCORE = 999999;
     public Colour colour;
     public int maxLevel;
 
@@ -13,7 +15,7 @@ public class Computer {
 
     public void move() {
         TreeNode zero = new TreeNode(0);
-        miniMax(zero, -999999, 999999);
+        miniMax(zero, WORST_WHITE_SCORE, WORST_BLACK_SCORE);
 
         List<Move> possibleMoves = new List<Move>();
         foreach (TreeNode treeNode in zero.branchingNodes) {
@@ -21,7 +23,6 @@ public class Computer {
                 possibleMoves.Add(treeNode.move);
             }
         }
-
 
         // Prioritise pawn moves if there are few pieces.
         if (Board.getOpposingTeamFromColour(colour).alivePieces.Count <= 8) {
@@ -90,9 +91,6 @@ public class Computer {
             }
 
             node.evaluateBranchValues();
-            if (node.level != 0) {
-                node.branchingNodes = null;
-            }
         }
     }
 }
