@@ -10,7 +10,6 @@ public class ComputerTimer : MonoBehaviour {
     void Start() {
         PAUSE_TIMER_START = 1;
         pauseTimer = PAUSE_TIMER_START;
-        Random.InitState(3);
     }
 
     void Update() {
