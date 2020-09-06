@@ -58,13 +58,13 @@ public class TreeNode {
         }
     }
 
-    public void evaluateBoardValue() {
+    public void evaluateBoardValue(int level) {
         if (Board.gameIsOver) {
             if (Board.turn == Colour.WHITE) {
-                value = Computer.WORST_WHITE_SCORE;
+                value = Computer.WORST_WHITE_SCORE / level;
             }
             else {
-                value = Computer.WORST_BLACK_SCORE;
+                value = Computer.WORST_BLACK_SCORE / level;
             }
 
             alphaBetaPruning();

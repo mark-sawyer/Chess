@@ -60,7 +60,7 @@ public class Computer {
         node.beta = beta;
 
         if (node.level == maxLevel || Board.gameIsOver || Board.gameIsStalemate) {
-            node.evaluateBoardValue();
+            node.evaluateBoardValue(node.level);
         }
         else {
             node.getBranchingNodes();
