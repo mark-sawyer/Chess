@@ -30,6 +30,7 @@ public class Computer {
             foreach (Move move in possibleMoves) {
                 if (move is PawnMove) {
                     pawnMoveIsPossible = true;
+                    break;
                 }
             }
 
